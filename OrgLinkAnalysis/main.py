@@ -1,10 +1,9 @@
-import numpy as np
-
 from node import Node
 from link import Link
 
 import networkx as graph
 import matplotlib.pyplot as plt
+import numpy as np
 
 # create new graph with mixed edge directions, but that can add multiple edges for two nodes
 mixed_graph = graph.MultiGraph()
