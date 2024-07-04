@@ -113,30 +113,36 @@ for u, v, data in mixed_graph.edges(data=True):
                                       connectionstyle=f"arc3,rad={arc_curvature}",
                                       arrows=True)
 
-            # Place edge label with slight offset for each edge
-            offset = 0.01  # TODO play around with this to find the correct layout
-
+            # Because multiple u-v edges will be curved using an arc curvature
+            # as a function of the number of edges between u and v, the edge
+            # labels should be place on the arc midpoint rather than the straight line.
+            # The logic below is to find the perpendicular line between the arc apex
+            # and the straight line midpoint, and the angle between the perpendicular
+            # line and the x-axis at the arc midpoint in order to compute the label offset
+            # from the straight line midpoint to the arc midpoint
             # arc mid-point coords:
-            arc_mid_x = (start_adjusted_x + end_adjusted_x) / 2
-            arc_mid_y = (start_adjusted_y + end_adjusted_y) / 2
+            straight_mid_x = (start_adjusted_x + end_adjusted_x) / 2
+            straight_mid_y = (start_adjusted_y + end_adjusted_y) / 2
             arc_dx = end_adjusted_x - start_adjusted_x
             arc_dy = end_adjusted_y - start_adjusted_y
-            # Get the angle between the x-axis and arc line:
-            arc_theta = np.arctan2(arc_dy, arc_dx)
+            # Get the angle between the x-axis and arc line,
+            # which is pi/2 minus the angle between the straight line and the x-axis
+            arc_theta = np.pi/2 - np.arctan2(arc_dy, arc_dx)
 
             # Arc apex position calculation
             # Assuming arc curvature is symmetric around midpoint,
-            # apex is vertically above midpoint (a half-baked assumption, but let's try)
-            apex_position = np.array([arc_mid_x, arc_mid_y + arc_curvature])
+            # apex is vertically above midpoint (a reasonable assumption w/ networkx drawings)
+            apex_x = straight_mid_x + np.abs(arc_curvature) * np.cos(arc_theta)
+            apex_y = straight_mid_y + np.abs(arc_curvature) * np.sin(arc_theta)
 
             # Compute perpendicular distance (example calculation)
-            perpendicular_distance = np.abs(apex_position[1] - arc_mid_y)
+            perpendicular_distance = np.abs(apex_y - straight_mid_y)
 
-            print(apex_position, perpendicular_distance, arc_theta)
+            label_x = apex_x
+            label_y = apex_y
 
-            label_x = arc_mid_x + perpendicular_distance * np.cos(arc_theta)
-            label_y = arc_mid_y - perpendicular_distance * np.sin(arc_theta)
             edge_label = data['relationship']
+
             plt.text(label_x, label_y, edge_label, fontsize=10,
                      color='black', ha='center', va='center')
 
