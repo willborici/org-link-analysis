@@ -13,6 +13,8 @@ mixed_graph = graph.MultiDiGraph()
 node1 = Node(node_id=1, label="Will")
 node2 = Node(node_id=2, label="Wilma")
 node3 = Node(node_id=3, label="Willa")
+node4 = Node(node_id=4, label="Bob")
+node5 = Node(node_id=5, label="Alice")
 
 link1 = Link(link_id=1, label="trust", weight=5)
 link2 = Link(link_id=2, label="advice", directed=True, weight=3)
@@ -22,6 +24,8 @@ link3 = Link(link_id=3, label="chat", weight=0.2)
 mixed_graph.add_node(node1.entity_id, entity=node1)
 mixed_graph.add_node(node2.entity_id, entity=node2)
 mixed_graph.add_node(node3.entity_id, entity=node3)
+mixed_graph.add_node(node4.entity_id, entity=node4)
+#mixed_graph.add_node(node5.entity_id, entity=node5)
 
 # add some links between nodes, with a label:
 mixed_graph.add_edge(node1.entity_id, node2.entity_id, directed=link3.directed, weight=link3.weight,
@@ -34,6 +38,10 @@ mixed_graph.add_edge(node3.entity_id, node2.entity_id, directed=link2.directed, 
                      relationship=link2.label)
 mixed_graph.add_edge(node3.entity_id, node1.entity_id, directed=link1.directed, weight=link1.weight,
                      relationship=link1.label)
+mixed_graph.add_edge(node4.entity_id, node1.entity_id, directed=link3.directed, weight=link3.weight,
+                     relationship=link3.label)
+mixed_graph.add_edge(node4.entity_id, node3.entity_id, directed=link2.directed, weight=link2.weight,
+                     relationship=link2.label)
 
 # Since networkx does not support mixed graphs, for each edge where directed=False,
 # create two directed edges with the same label -- and add them to the mixed_graph instance.
@@ -50,11 +58,11 @@ for u, v, data in mixed_graph.edges(data=True):
         mixed_graph.add_edge(v, u, directed=True, weight=data['weight'], relationship=data['relationship'])
 
 # Visualize the graph
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(8, 8))
 
 # Draw nodes with labels
 pos = graph.spring_layout(mixed_graph)  # node positions (dict.) after layout
-round_node_size = 2000  # needed for later when we draw edges that extend to the circumference
+round_node_size = 1000  # needed for later when we draw edges that extend to the circumference
 graph.draw_networkx_nodes(mixed_graph, pos,
                           node_color='orange', node_size=round_node_size,
                           node_shape='o', alpha=0.8)
@@ -65,6 +73,10 @@ graph.draw_networkx_labels(mixed_graph, pos,
 # Draw edges, such that any multiple edges between two nodes are discernible
 for u, v, data in mixed_graph.edges(data=True):
     num_edges = mixed_graph.number_of_edges(u, v)
+
+    label_x = (pos[u][0] + pos[v][0]) / 2
+    label_y = (pos[u][1] + pos[v][1]) / 2
+
     if num_edges == 1:  # these are the originally input directed edges
         graph.draw_networkx_edges(mixed_graph, pos, edgelist=[(u, v)],
                                   style="solid", edge_color='gray',
@@ -73,12 +85,10 @@ for u, v, data in mixed_graph.edges(data=True):
 
         # Place edge label at midpoint of nodes u and v,
         # where [u][0] is the x value, [u][1] is they value
-        label_x = (pos[u][0] + pos[v][0]) / 2
-        label_y = (pos[u][1] + pos[v][1]) / 2
         edge_label = data['relationship']
         plt.text(label_x, label_y, edge_label, fontsize=10,
                  color='black', ha='center', va='center')
-    else:  # multiple edges between u and v TODO: update to if-elif-else to include orphan nodes
+    elif num_edges > 1:  # multiple edges between u and v
         # Determine the layout between the x-axis and the line segment from u to v:
         #
         #        v
@@ -148,35 +158,32 @@ for u, v, data in mixed_graph.edges(data=True):
             # and v and u are in different positions (two cases) == the other four cases
             # are redundant. This method is hit-and-miss, since networkx layout algorithms
             # may place arcs above or below despite curvature sign... TODO find a smarter solution
-            apex_x = straight_mid_x
-            apex_y = straight_mid_y
             if (vx > ux) and (vy > uy):
                 # Case 1: vx > ux and vy > uy, arc is below the line UV,
                 # subtract the arc height from y-coordinate of the straight line midpoint
                 if arc_curvature < 0:
-                    apex_x = straight_mid_x + arc_height * np.cos(arc_theta)
-                    apex_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
+                    label_x = straight_mid_x + arc_height * np.cos(arc_theta)
+                    label_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
                 else:  # positive arc curvature means the arc will be drawn above the straight line
                     # Case 2: vx > ux and vy > uy, arc is above the line UV
-                    apex_x = straight_mid_x - arc_height * np.cos(arc_theta)
-                    apex_y = straight_mid_y + arc_height * np.sin(arc_theta) + arc_height
+                    label_x = straight_mid_x - arc_height * np.cos(arc_theta)
+                    label_y = straight_mid_y + arc_height * np.sin(arc_theta) + arc_height
             elif (vx > ux) and (vy < uy):
                 # Case 3: vx > ux but vy < uy, arc is below the line UV,
                 # subtract the arc height from y-coordinate of the straight line midpoint
                 if arc_curvature < 0:
-                    apex_x = straight_mid_x - arc_height * np.cos(arc_theta)
-                    apex_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
+                    label_x = straight_mid_x - arc_height * np.cos(arc_theta)
+                    label_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
                 else:  # positive arc curvature means the arc will be drawn above the straight line
                     # Case 4: vx > ux and vy > uy, arc is above the line UV
-                    apex_x = straight_mid_x + arc_height * np.cos(arc_theta)
-                    apex_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
+                    label_x = straight_mid_x + arc_height * np.cos(arc_theta)
+                    label_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
 
-            label_x = apex_x
-            label_y = apex_y
             edge_label = data['relationship']
-
             plt.text(label_x, label_y, edge_label, fontsize=10,
                      color='black', ha='center', va='center')
+        else:  # TODO: update to include orphan nodes
+            pass
 
 plt.title("Mixed Graph Visualization with Curved Edges")
 plt.axis('off')  # Turn off axis
