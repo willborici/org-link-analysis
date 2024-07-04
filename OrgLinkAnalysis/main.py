@@ -67,7 +67,9 @@ for u, v, data in mixed_graph.edges(data=True):
     num_edges = mixed_graph.number_of_edges(u, v)
     if num_edges == 1:  # these are the originally input directed edges
         graph.draw_networkx_edges(mixed_graph, pos, edgelist=[(u, v)],
-                                  style="solid", edge_color='gray', width=data['weight'])
+                                  style="solid", edge_color='gray',
+                                  node_size=round_node_size,
+                                  width=data['weight'])
 
         # Place edge label at midpoint of nodes u and v,
         # where [u][0] is the x value, [u][1] is they value
@@ -90,26 +92,23 @@ for u, v, data in mixed_graph.edges(data=True):
         # Get the angle between the x-axis and uv line:
         theta = np.arctan2(dy, dx)
 
-        # only works for bubble-shaped nodes, assume same radius for all nodes
-        # the round_node_size is in points square, so convert to radius by sqrt (node area/ pi):
-        radius = np.sqrt(round_node_size / np.pi)
-
         edge_list = []  # capture edges with updated start & target coordinates
         for i in range(num_edges):
             # Calculate adjusted start and end positions for the edge
             # such that they begin and end at the node edges, not at node center points
-            start_adjusted_x = pos[u][0] + radius * np.cos(theta)
-            start_adjusted_y = pos[u][1] + radius * np.sin(theta)
-            end_adjusted_x = pos[v][0] - radius * np.cos(theta)
-            end_adjusted_y = pos[v][1] - radius * np.sin(theta)
+            ux = pos[u][0]
+            uy = pos[u][1]
+            vx = pos[v][0]
+            vy = pos[v][1]
 
-            edge_list.append((u, v, {'start_pos': (start_adjusted_x, start_adjusted_y),
-                                     'end_pos': (end_adjusted_x, end_adjusted_y)}))
+            edge_list.append((u, v, {'start_pos': (ux, uy),
+                                     'end_pos': (vx, vy)}))
 
             arc_curvature = 0.1 + (i * 0.3)
             graph.draw_networkx_edges(mixed_graph, pos, edgelist=edge_list,
                                       width=data['weight'],
                                       edge_color='gray',
+                                      node_size=round_node_size,
                                       connectionstyle=f"arc3,rad={arc_curvature}",
                                       arrows=True)
 
@@ -119,28 +118,61 @@ for u, v, data in mixed_graph.edges(data=True):
             # The logic below is to find the perpendicular line between the arc apex
             # and the straight line midpoint, and the angle between the perpendicular
             # line and the x-axis at the arc midpoint in order to compute the label offset
-            # from the straight line midpoint to the arc midpoint
-            # arc mid-point coords:
-            straight_mid_x = (start_adjusted_x + end_adjusted_x) / 2
-            straight_mid_y = (start_adjusted_y + end_adjusted_y) / 2
-            arc_dx = end_adjusted_x - start_adjusted_x
-            arc_dy = end_adjusted_y - start_adjusted_y
-            # Get the angle between the x-axis and arc line,
-            # which is pi/2 minus the angle between the straight line and the x-axis
-            arc_theta = np.pi/2 - np.arctan2(arc_dy, arc_dx)
+            # from the straight line x and y coordinates to the arc midpoint coordinates:
 
-            # Arc apex position calculation
-            # Assuming arc curvature is symmetric around midpoint,
-            # apex is vertically above midpoint (a reasonable assumption w/ networkx drawings)
-            apex_x = straight_mid_x + np.abs(arc_curvature) * np.cos(arc_theta)
-            apex_y = straight_mid_y + np.abs(arc_curvature) * np.sin(arc_theta)
+            # Find the mid-point of the straight line u->v
+            straight_mid_x = (ux + vx) / 2
+            straight_mid_y = (uy + vy) / 2
+            # Find the distance between the nodes u and v:
+            distance_uv = np.sqrt((vx - ux) ** 2 + (vy - uy) ** 2)
+            # Find the arc radius, given the curvature:
+            arc_radius = 1 / arc_curvature
+            # Find the height of the arc from the straight line midpoint to the apex
+            arc_height = 0
+            if arc_radius >= distance_uv / 2:  # if, for some reason, 2*arc_radius < distance_uv...
+                arc_height = arc_radius - np.sqrt(arc_radius ** 2 - (distance_uv / 2) ** 2)
 
-            # Compute perpendicular distance (example calculation)
-            perpendicular_distance = np.abs(apex_y - straight_mid_y)
+            # slope of straight line from u to v:
+            straight_dx = vx - ux
+            straight_dy = vy - uy
+            slope_uv = straight_dy / straight_dx
+            # slope of the perpendicular bisector from uv midpoint to arc's apex:
+            slope_bisector = -1 / slope_uv
+
+            # Get the angle between the x-axis and the perpendicular bisector:
+            arc_theta = np.arctan(slope_bisector)
+
+            # Arc apex positions are then shifted as a function of
+            # the arc's height and arc's theta, as well as where the arc is located
+            # in terms of the u and v layout: above or below the straight line (two cases)
+            # and v and u are in different positions (two cases) == the other four cases
+            # are redundant. This method is hit-and-miss, since networkx layout algorithms
+            # may place arcs above or below despite curvature sign... TODO find a smarter solution
+            apex_x = straight_mid_x
+            apex_y = straight_mid_y
+            if (vx > ux) and (vy > uy):
+                # Case 1: vx > ux and vy > uy, arc is below the line UV,
+                # subtract the arc height from y-coordinate of the straight line midpoint
+                if arc_curvature < 0:
+                    apex_x = straight_mid_x + arc_height * np.cos(arc_theta)
+                    apex_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
+                else:  # positive arc curvature means the arc will be drawn above the straight line
+                    # Case 2: vx > ux and vy > uy, arc is above the line UV
+                    apex_x = straight_mid_x - arc_height * np.cos(arc_theta)
+                    apex_y = straight_mid_y + arc_height * np.sin(arc_theta) + arc_height
+            elif (vx > ux) and (vy < uy):
+                # Case 3: vx > ux but vy < uy, arc is below the line UV,
+                # subtract the arc height from y-coordinate of the straight line midpoint
+                if arc_curvature < 0:
+                    apex_x = straight_mid_x - arc_height * np.cos(arc_theta)
+                    apex_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
+                else:  # positive arc curvature means the arc will be drawn above the straight line
+                    # Case 4: vx > ux and vy > uy, arc is above the line UV
+                    apex_x = straight_mid_x + arc_height * np.cos(arc_theta)
+                    apex_y = straight_mid_y - arc_height * np.sin(arc_theta) - arc_height
 
             label_x = apex_x
             label_y = apex_y
-
             edge_label = data['relationship']
 
             plt.text(label_x, label_y, edge_label, fontsize=10,
