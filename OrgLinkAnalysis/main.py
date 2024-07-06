@@ -68,7 +68,7 @@ for u, v, key, data in list(mixed_graph.edges(data=True, keys=True)):
 plt.figure(figsize=(8, 8))
 
 # Draw nodes with node labels
-pos = graph.spring_layout(mixed_graph)  # node positions (dict.) after layout
+pos = graph.fruchterman_reingold_layout(mixed_graph)  # node positions (dict.) after layout
 round_node_size = 1000  # needed for later when we draw edges that extend to the circumference
 graph.draw_networkx_nodes(mixed_graph, pos,
                           node_color='orange', node_size=round_node_size,
@@ -132,28 +132,32 @@ plt.show()
 # TODO create functions for the plots for maintenance
 
 fig = go.Figure()
-pos = graph.spring_layout(mixed_graph)  # Replace with your desired layout algorithm
+pos = graph.fruchterman_reingold_layout(mixed_graph)  # try this layout
 for node in mixed_graph.nodes():
     x, y = pos[node]
-    fig.add_trace(go.Scatter(x=[x], y=[y], mode='markers',
+    fig.add_trace(go.Scatter(x=[x], y=[y], mode='markers+text',
                              marker=dict(size=10, color='blue'),
-                             text=node, name=node))
+                             text=node, name=node,
+                             hoverinfo='text'))
 
-for u, v, data in mixed_graph.edges(data=True):
-    edge_data = mixed_graph[u][v]
-    num_edges = len(edge_data)
+for u, v, key, data in mixed_graph.edges(data=True, keys=True):
+    # Retrieve the number of edges (ignoring direction) between
+    # u and v from preprocessed dictionary num_edges_d
+    num_edges = num_edges_d.get((u, v), 0)  # return 0 if no edges
 
     if num_edges == 1:
         # Single edge case, draw a straight line
         x0, y0 = pos[u]
         x1, y1 = pos[v]
-        fig.add_trace(go.Scatter(x=[x0, x1], y=[y0, y1], mode='lines',
+        fig.add_trace(go.Scatter(x=[x0, x1], y=[y0, y1], mode='lines+text',
                                  line=dict(width=data['weight'], color='gray'),
-                                 hoverinfo='none'))
+                                 text=data['relationship'],
+                                 hoverinfo='text'))
     else:
-        # Multiple edges case, draw curved paths
-        for i, (edge_key, edge_attr) in enumerate(edge_data.items()):
-            arc_style = 0.1 + 0.3 * (i / (num_edges + 1))
+        # Multiple edges, draw arcs
+        edge_list = [(u, v, key) for key in mixed_graph[u][v]]
+        for i, (source, target, edge_key) in enumerate(edge_list):
+            arc_style = 0.5 + 0.5 * (i / (num_edges + 1))
 
             x0, y0 = pos[u]
             x1, y1 = pos[v]
@@ -163,12 +167,14 @@ for u, v, data in mixed_graph.edges(data=True):
             cy = 0.5 * (y0 + y1) + arc_style * (x0 - x1)
 
             # Create Bézier curve path
-            fig.add_trace(go.Scatter(x=[x0, cx, x1], y=[y0, cy, y1], mode='lines',
-                                     line=dict(width=edge_attr['weight'], color='gray'),
-                                     hoverinfo='none'))
+            fig.add_trace(go.Scatter(x=[x0, cx, x1], y=[y0, cy, y1], mode='lines+text',
+                                     line=dict(width=mixed_graph[source][target][edge_key]['weight'], color='gray'),
+                                     text=mixed_graph[source][target][edge_key]['relationship'],
+                                     textposition='middle center',
+                                     hoverinfo='text'))
 
 fig.update_layout(
-    title='Graph Visualization',
+    title='Org Network Analysis',
     showlegend=False,
     hovermode='closest',
     margin=dict(b=0, l=0, r=0, t=40),
