@@ -6,8 +6,8 @@ from entity import Entity
 
 class Link(Entity):
     # assume the edge is undirected (most common in org. networks):
-    def __init__(self, link_id, label, directed=False, weight=1, **kwargs):
-        super().__init__(link_id, label, **kwargs)
+    def __init__(self, label, directed=False, weight=1, **kwargs):
+        super().__init__(label, **kwargs)
         self.__directed = directed
         self.__weight = weight
 

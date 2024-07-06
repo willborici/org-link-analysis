@@ -4,5 +4,5 @@ from entity import Entity
 
 
 class Node(Entity):
-    def __init__(self, node_id, label, **kwargs):
-        super().__init__(node_id, label, **kwargs)
+    def __init__(self, label, **kwargs):
+        super().__init__(label, **kwargs)
