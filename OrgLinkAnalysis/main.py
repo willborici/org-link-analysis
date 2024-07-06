@@ -95,9 +95,7 @@ for u, v, key, data in mixed_graph.edges(data=True, keys=True):
                                   node_size=round_node_size, width=data['weight'],
                                   connectionstyle=f"arc3,rad=0.1")
         edge_labels = {(u, v, key): data['relationship']}
-        label_pos = 0.5  # one edge, keep label centered on drawn line
         graph.draw_networkx_edge_labels(mixed_graph, pos, edge_labels=edge_labels,
-                                        label_pos=label_pos,
                                         font_size=10, font_color='black')
     elif num_edges > 1:  # multiple edges between u and v
         # gather into the edge_list all the edge keys from the graph:
@@ -113,7 +111,7 @@ for u, v, key, data in mixed_graph.edges(data=True, keys=True):
                                       connectionstyle=f"arc3,rad={arc_style}")
             edge_labels = {(source, target, edge_key): mixed_graph[source][target][edge_key]['relationship']}
             # play with this to move label around to minimize overlays
-            label_pos = 0.5 + 0.4 * (i / num_edges)
+            label_pos = 0.1 + 0.3 * (i / num_edges) + 0.5
             graph.draw_networkx_edge_labels(mixed_graph, pos, edge_labels=edge_labels,
                                             label_pos=label_pos,
                                             font_size=10, font_color='black')
