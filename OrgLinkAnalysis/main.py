@@ -2,6 +2,7 @@ from node import Node
 from link import Link
 import networkx as graph
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
 # create new graph with mixed edge directions, but that can add multiple edges for two nodes
 # use a MultiDiGraph to represent both directed and undirected edges
@@ -23,7 +24,7 @@ mixed_graph.add_node(node1.label, entity=node1)
 mixed_graph.add_node(node2.label, entity=node2)
 mixed_graph.add_node(node3.label, entity=node3)
 mixed_graph.add_node(node4.label, entity=node4)
-# mixed_graph.add_node(node5.label, entity=node5)  # orphan node
+mixed_graph.add_node(node5.label, entity=node5)  # orphan node
 
 # add some links between nodes, with a label:
 mixed_graph.add_edge(node1.label, node2.label, directed=link3.directed, weight=link3.weight,
@@ -39,6 +40,10 @@ mixed_graph.add_edge(node3.label, node1.label, directed=link1.directed, weight=l
 mixed_graph.add_edge(node4.label, node1.label, directed=link3.directed, weight=link3.weight,
                      relationship=link3.label)
 mixed_graph.add_edge(node4.label, node3.label, directed=link2.directed, weight=link2.weight,
+                     relationship=link2.label)
+mixed_graph.add_edge(node5.label, node1.label, directed=link2.directed, weight=link2.weight,
+                     relationship=link2.label)
+mixed_graph.add_edge(node5.label, node4.label, directed=link2.directed, weight=link2.weight,
                      relationship=link2.label)
 
 # Since networkx does not support mixed graphs, for each edge where directed=False,
@@ -96,7 +101,7 @@ for u, v, key, data in mixed_graph.edges(data=True, keys=True):
                                   connectionstyle=f"arc3,rad=0.1")
         edge_labels = {(u, v, key): data['relationship']}
         graph.draw_networkx_edge_labels(mixed_graph, pos, edge_labels=edge_labels,
-                                        font_size=10, font_color='black')
+                                        font_size=7, font_color='black')
     elif num_edges > 1:  # multiple edges between u and v
         # gather into the edge_list all the edge keys from the graph:
         edge_list = [(u, v, key) for key in mixed_graph[u][v]]
@@ -114,10 +119,62 @@ for u, v, key, data in mixed_graph.edges(data=True, keys=True):
             label_pos = 0.1 + 0.3 * (i / num_edges) + 0.5
             graph.draw_networkx_edge_labels(mixed_graph, pos, edge_labels=edge_labels,
                                             label_pos=label_pos,
-                                            font_size=10, font_color='black')
+                                            font_size=7, font_color='black')
     else:  # TODO: update to include logic, if any, for orphan nodes
         pass
 
 plt.title("Mixed Graph Visualization with Curved Edges")
 plt.axis('off')  # Turn off axis
 plt.show()
+
+# plotly code below -- experimental but not as nice as matplot lib for curves
+# TODO play around with Bezier curves to generate better plotly edges
+# TODO create functions for the plots for maintenance
+
+fig = go.Figure()
+pos = graph.spring_layout(mixed_graph)  # Replace with your desired layout algorithm
+for node in mixed_graph.nodes():
+    x, y = pos[node]
+    fig.add_trace(go.Scatter(x=[x], y=[y], mode='markers',
+                             marker=dict(size=10, color='blue'),
+                             text=node, name=node))
+
+for u, v, data in mixed_graph.edges(data=True):
+    edge_data = mixed_graph[u][v]
+    num_edges = len(edge_data)
+
+    if num_edges == 1:
+        # Single edge case, draw a straight line
+        x0, y0 = pos[u]
+        x1, y1 = pos[v]
+        fig.add_trace(go.Scatter(x=[x0, x1], y=[y0, y1], mode='lines',
+                                 line=dict(width=data['weight'], color='gray'),
+                                 hoverinfo='none'))
+    else:
+        # Multiple edges case, draw curved paths
+        for i, (edge_key, edge_attr) in enumerate(edge_data.items()):
+            arc_style = 0.1 + 0.3 * (i / (num_edges + 1))
+
+            x0, y0 = pos[u]
+            x1, y1 = pos[v]
+
+            # Calculate control points for Bézier curve
+            cx = 0.5 * (x0 + x1) + arc_style * (y1 - y0)
+            cy = 0.5 * (y0 + y1) + arc_style * (x0 - x1)
+
+            # Create Bézier curve path
+            fig.add_trace(go.Scatter(x=[x0, cx, x1], y=[y0, cy, y1], mode='lines',
+                                     line=dict(width=edge_attr['weight'], color='gray'),
+                                     hoverinfo='none'))
+
+fig.update_layout(
+    title='Graph Visualization',
+    showlegend=False,
+    hovermode='closest',
+    margin=dict(b=0, l=0, r=0, t=40),
+    xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+    yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)
+)
+
+fig.show()
+
