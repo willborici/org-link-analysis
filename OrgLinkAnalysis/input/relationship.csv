@@ -1,4 +1,4 @@
-﻿Source,Target,Link
+Source,Target,Link
 Will,Wilma,Chat
 Will,Wilma,Trust
 Willa,Will,Advice
@@ -8,3 +8,4 @@ Bob,Will,Chat
 Bob,Willa,Advice
 Alice,Will,Advice
 Alice,Bob,Advice
+Joe,Willa,Chat
