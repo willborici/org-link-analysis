@@ -1,3 +1,5 @@
+import numpy as np
+
 from node import Node
 from link import Link
 import networkx as graph
@@ -135,9 +137,13 @@ fig = go.Figure()
 pos = graph.fruchterman_reingold_layout(mixed_graph)  # try this layout
 for node in mixed_graph.nodes():
     x, y = pos[node]
-    fig.add_trace(go.Scatter(x=[x], y=[y], mode='markers+text',
+    fig.add_trace(go.Scatter(x=[x],
+                             y=[y],
+                             mode='markers+text',
                              marker=dict(size=10, color='blue'),
-                             text=node, name=node,
+                             text=node,
+                             name=node,
+                             textposition='bottom center',
                              hoverinfo='text'))
 
 for u, v, key, data in mixed_graph.edges(data=True, keys=True):
@@ -149,28 +155,35 @@ for u, v, key, data in mixed_graph.edges(data=True, keys=True):
         # Single edge case, draw a straight line
         x0, y0 = pos[u]
         x1, y1 = pos[v]
-        fig.add_trace(go.Scatter(x=[x0, x1], y=[y0, y1], mode='lines+text',
+        fig.add_trace(go.Scatter(x=[x0, x1],
+                                 y=[y0, y1],
+                                 mode='lines+text',
                                  line=dict(width=data['weight'], color='gray'),
                                  text=data['relationship'],
+                                 textposition='top center',
                                  hoverinfo='text'))
     else:
         # Multiple edges, draw arcs
         edge_list = [(u, v, key) for key in mixed_graph[u][v]]
         for i, (source, target, edge_key) in enumerate(edge_list):
-            arc_style = 0.5 + 0.5 * (i / (num_edges + 1))
+            arc_style = 0.5 * (1 - np.cos(np.pi * (i + 1) / (num_edges + 1)))
 
             x0, y0 = pos[u]
             x1, y1 = pos[v]
 
             # Calculate control points for Bézier curve
-            cx = 0.5 * (x0 + x1) + arc_style * (y1 - y0)
-            cy = 0.5 * (y0 + y1) + arc_style * (x0 - x1)
+            # TODO make this a smoother Bézier line
+            cx, cy = 0.5 * (x0 + x1), 0.5 * (y0 + y1)  # set to mid-point of (x0, y0) and (x1, y1)
+            control_x = cx + arc_style * (y1 - y0)
+            control_y = cy - arc_style * (x0 - x1)
 
             # Create Bézier curve path
-            fig.add_trace(go.Scatter(x=[x0, cx, x1], y=[y0, cy, y1], mode='lines+text',
+            fig.add_trace(go.Scatter(x=[x0, control_x, x1],
+                                     y=[y0, control_y, y1],
+                                     mode='lines+text',
                                      line=dict(width=mixed_graph[source][target][edge_key]['weight'], color='gray'),
                                      text=mixed_graph[source][target][edge_key]['relationship'],
-                                     textposition='middle center',
+                                     textposition='top center',
                                      hoverinfo='text'))
 
 fig.update_layout(
@@ -183,4 +196,3 @@ fig.update_layout(
 )
 
 fig.show()
-
