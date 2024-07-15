@@ -42,27 +42,16 @@ for relationship_index, row in relationship_df.iterrows():
             weight = link.weight
             break
 
-    # add edge to the graph:
-    mixed_graph.add_edge(source_node, target_node, directed=directed, weight=weight,
-                         relationship=link_label)
-
-# Since networkx does not support mixed graphs, for each edge where directed=False,
-# create two directed edges with the same label -- and add them to the mixed_graph instance.
-# As a result there will always be at least two edges between two nodes (not ideal, but why not)
-# logic: <create a function> for all added edges in mixed_graph,
-#           if not edge(u->v).directed:
-#               make edge(u->v) directed,
-#               then mixed_graph.add_edge(v->u, directed=True)
-# key is needed to update the graph (see if not below), otherwise unexpected networkx behavior!
-for u, v, key, data in list(mixed_graph.edges(data=True, keys=True)):
-    if not data['directed']:
-        # Update existing edge u->v to directed
-        mixed_graph[u][v][key]['directed'] = True
-        # Check if v->u already exists, so it doesn't process twice
-        if not mixed_graph.has_edge(v, u, key):
-            # Add a new directed edge v -> u with the same attributes as u -> v
-            mixed_graph.add_edge(v, u, key, directed=True, weight=data['weight'],
-                                 relationship=data['relationship'])
+    # if this is an undirected edge, create two directed edges because nextworkx
+    # does not support mixed graphs -- so normalize all edges to directed:
+    if not directed:
+        mixed_graph.add_edge(source_node, target_node, directed=True, weight=weight,
+                             relationship=link_label)
+        mixed_graph.add_edge(target_node, source_node, directed=True, weight=weight,
+                             relationship=link_label)
+    else:
+        mixed_graph.add_edge(source_node, target_node, directed=True, weight=weight,
+                             relationship=link_label)
 
 # Visualize the graph statically:
 draw_graph.build_static_network(graph, mixed_graph)
