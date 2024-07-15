@@ -2,48 +2,49 @@ import graph_viz as draw_graph
 from node import Node
 from link import Link
 import networkx as graph
+import pandas as pd  # to read the csv input data
 
 # create new graph with mixed edge directions, but that can add multiple edges for two nodes
 # use a MultiDiGraph to represent both directed and undirected edges
 mixed_graph = graph.MultiDiGraph()
 
-# create some nodes and links to add to the graph
-node1 = Node(label="Will")
-node2 = Node(label="Wilma")
-node3 = Node(label="Willa")
-node4 = Node(label="Bob")
-node5 = Node(label="Alice")
+# read the source files:
+# input/node.csv: the nodes
+# input/link.csv: the kinds of links and related properties like weight
+# input/relationship.csv: the links between any two given nodes
+node_df = pd.read_csv('./input/node.csv')
+link_df = pd.read_csv('./input/link.csv')
+relationship_df = pd.read_csv('./input/relationship.csv')
 
-link1 = Link(label="trust", weight=5)
-link2 = Link(label="advice", directed=True, weight=3)
-link3 = Link(label="chat", weight=0.5)
+# instantiate node and link objects from input data:
+nodes = [Node(row['Label'], ID=row['ID']) for node_df_index, row in node_df.iterrows()]
+links = [Link(row['Label'], directed=row['Directed'],
+              weight=row['Weight'], ID=row['ID']) for link_df_index, row in link_df.iterrows()]
 
-# add some nodes of Node class to the graph:
-mixed_graph.add_node(node1.label, entity=node1)
-mixed_graph.add_node(node2.label, entity=node2)
-mixed_graph.add_node(node3.label, entity=node3)
-mixed_graph.add_node(node4.label, entity=node4)
-mixed_graph.add_node(node5.label, entity=node5)  # orphan node
+# add the nodes to the mixed graph:
+for node in nodes:
+    mixed_graph.add_node(node.label, entity=node)
 
-# add some links between nodes, with a label:
-mixed_graph.add_edge(node1.label, node2.label, directed=link3.directed, weight=link3.weight,
-                     relationship=link3.label)
-mixed_graph.add_edge(node1.label, node2.label, directed=link1.directed, weight=link1.weight,
-                     relationship=link1.label)
-mixed_graph.add_edge(node3.label, node1.label, directed=link2.directed, weight=link2.weight,
-                     relationship=link2.label)
-mixed_graph.add_edge(node3.label, node2.label, directed=link2.directed, weight=link2.weight,
-                     relationship=link2.label)
-mixed_graph.add_edge(node3.label, node1.label, directed=link1.directed, weight=link1.weight,
-                     relationship=link1.label)
-mixed_graph.add_edge(node4.label, node1.label, directed=link3.directed, weight=link3.weight,
-                     relationship=link3.label)
-mixed_graph.add_edge(node4.label, node3.label, directed=link2.directed, weight=link2.weight,
-                     relationship=link2.label)
-mixed_graph.add_edge(node5.label, node1.label, directed=link2.directed, weight=link2.weight,
-                     relationship=link2.label)
-mixed_graph.add_edge(node5.label, node4.label, directed=link2.directed, weight=link2.weight,
-                     relationship=link2.label)
+# add the edges into the mixed_graph:
+for relationship_index, row in relationship_df.iterrows():
+    source_node = row['Source']
+    target_node = row['Target']
+    link_label = row['Link']
+
+    # given the link label in relationship_df, search for the corresponding record in links[]
+    # assume some default values in case:
+    directed = False
+    weight = 1.0
+    for link in links:
+        if link.label == link_label:
+            # fetch the directed and weight values from link[]
+            directed = link.directed
+            weight = link.weight
+            break
+
+    # add edge to the graph:
+    mixed_graph.add_edge(source_node, target_node, directed=directed, weight=weight,
+                         relationship=link_label)
 
 # Since networkx does not support mixed graphs, for each edge where directed=False,
 # create two directed edges with the same label -- and add them to the mixed_graph instance.
