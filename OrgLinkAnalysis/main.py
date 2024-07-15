@@ -1,4 +1,5 @@
 import graph_viz as draw_graph
+import report as report
 from node import Node
 from link import Link
 import networkx as graph
@@ -54,7 +55,23 @@ for relationship_index, row in relationship_df.iterrows():
                              relationship=link_label)
 
 # Visualize the graph statically:
-draw_graph.build_static_network(graph, mixed_graph)
+#draw_graph.build_static_network(graph, mixed_graph)
 
 # Visualize the graph dynamically:
-draw_graph.build_dynamic_network(graph, mixed_graph)
+#draw_graph.build_dynamic_network(graph, mixed_graph)
+
+
+# fetch the graph type to pass it to the report generator below
+# since some graph algorithms run on specific graph types
+graph_type = ''
+if '.Graph' in str(type(mixed_graph)):
+    graph_type = 'simple undirected'
+elif '.DiGraph' in str(type(mixed_graph)):
+    graph_type = 'simple directed'
+elif '.MultiGraph' in str(type(mixed_graph)):
+    graph_type = 'multi-graph'
+elif '.MultiDiGraph' in str(type(mixed_graph)):
+    graph_type = 'multi-digraph'
+
+# generate a report of the graph-algorithmic analysis
+report.generate_analysis_report(graph, graph_type, mixed_graph)
