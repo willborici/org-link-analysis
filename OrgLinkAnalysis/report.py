@@ -5,6 +5,10 @@ import networkx
 def analyze_centrality(graph, graph_type, mixed_graph):
     centrality_analysis = {}
 
+    # Degree centrality measures the number of direct relationships (both incoming and outgoing)
+    # for each node. In our case, for advice, it indicates how many people seek advice from a
+    # particular individual. For trust and chat, it shows how many trusted relationships or
+    # chat connections a node has.
     centrality_analysis['degree'] = graph.degree_centrality(mixed_graph),
 
     if graph_type in ('simple directed', 'simple undirected'):
@@ -15,8 +19,14 @@ def analyze_centrality(graph, graph_type, mixed_graph):
     else:
         centrality_analysis['eigenvector'] = 'no eigenvector for mixed graphs'
 
+    # Closeness Centrality measures how close a node is to all other nodes in the network.
+    # It indicates nodes that can quickly interact with others, which might be important for
+    # spreading information or influence.
     centrality_analysis['closeness'] = graph.closeness_centrality(mixed_graph)
 
+    # Betweenness Centrality identifies nodes that act as bridges between different parts of the
+    # network. It can highlight nodes that are critical for communication or influence across
+    # the organization.
     centrality_analysis['betweenness'] = graph.betweenness_centrality(mixed_graph)
 
     return centrality_analysis
@@ -51,6 +61,8 @@ def analyze_connectivity(graph, graph_type, mixed_graph):
 
 
 def analyze_paths(graph, graph_type, mixed_graph):
+    # Shortest Paths: Computes the shortest paths between nodes, which can indicate communication
+    # efficiency or how quickly information can spread through the network.
     path_analysis = {}
 
     if graph_type in ['simple undirected', 'simple directed']:
@@ -102,6 +114,13 @@ def compute_clustering_coefficient_multidigraph(G):
 
 
 def analyze_clustering(graph, graph_type, mixed_graph):
+    # Clustering Coefficient measures the density of connections among a node's neighbors.
+    # For advice, it shows how likely nodes receiving advice from the same person are to also
+    # interact. For trust and chat, it reflects the formation of clusters of trust or communication.
+    # Transitivity: In a directed graph context, measures the likelihood that if node A trusts or
+    # chats with node B and node B trusts or chats with node C, then node A also trusts or
+    # chats with node C. It reflects the formation of trust or communication triangles in your
+    # network.
     clustering_analysis = {}
 
     if graph_type == 'simple undirected':
@@ -133,6 +152,9 @@ def analyze_clustering(graph, graph_type, mixed_graph):
 
 
 def analyze_assortativity(graph, graph_type, mixed_graph):
+    # Assortativity Coefficient measures the tendency of nodes to connect to others that are
+    # similar in some way (e.g., similar degree). This can show whether individuals tend to
+    # connect with others who seek advice, trust each other, or chat frequently.
     assortativity_analysis = {}
 
     if graph_type in ['simple undirected', 'multi-graph']:
