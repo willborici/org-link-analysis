@@ -21,7 +21,7 @@ def number_of_edges_u_v(mixed_graph):
 
 
 # static multi/multidigraph visualization via matplotlib:
-def build_static_multi_network(graph, mixed_graph):
+def build_static_multi_network(graph, mixed_graph, graph_type, network_name):
     plt.figure(figsize=(8, 8))
 
     # Draw nodes with node labels
@@ -70,15 +70,15 @@ def build_static_multi_network(graph, mixed_graph):
         else:  # TODO: update to include logic, if any, for orphan nodes
             pass
 
-    plt.title(f"{mixed_graph}")
+    plt.title(f"{network_name} ({graph_type})")
     plt.axis('off')  # Turn off axis
-    # plt.show()  # Comment out for large graphs
+    # plt.show()  # comment out for larger graphs
     image_file_name = str(mixed_graph).replace(' ', '-')
+    image_file_name = network_name.replace(' ', '-') + '-' + image_file_name
     plt.savefig(f'./output/{image_file_name}.png')
 
-
 # Static visualization for Graph/DiGraph types:
-def build_static_network(graph, simple_graph):
+def build_static_network(graph, simple_graph, graph_type, network_name):
     plt.figure(figsize=(8, 8))
 
     # Draw nodes with node labels
@@ -94,12 +94,12 @@ def build_static_network(graph, simple_graph):
                                labels=node_labels,
                                font_size=10, font_color='black')
 
-    # Draw edges with edge labels
+    # Draw edges with no edge labels (since it's a simple graph)
     for u, v, data in simple_graph.edges(data=True):
-        if simple_graph.is_directed():
-            edge_label = {(u, v): data['relationship']}
-        else:
-            edge_label = {(min(u, v), max(u, v)): data['relationship']}  # Handle undirected graphs
+        # if simple_graph.is_directed():
+        #     edge_label = {(u, v): data['relationship']}
+        # else:
+        #     edge_label = {(min(u, v), max(u, v)): data['relationship']}  # Handle undirected graphs
 
         # Draw each edge separately
         graph.draw_networkx_edges(simple_graph, pos, edgelist=[(u, v)],
@@ -107,19 +107,20 @@ def build_static_network(graph, simple_graph):
                                   node_size=round_node_size,
                                   width=data.get('weight', 1.0))
 
-        graph.draw_networkx_edge_labels(simple_graph, pos, edge_labels=edge_label,
-                                        font_size=7, font_color='black',
-                                        label_pos=0.5, verticalalignment='center')
+        # graph.draw_networkx_edge_labels(simple_graph, pos, edge_labels=edge_label,
+        #                                 font_size=7, font_color='black',
+        #                                 label_pos=0.5, verticalalignment='center')
 
-    plt.title(f"{simple_graph}")
+    plt.title(f"{network_name} ({graph_type})")
     plt.axis('off')  # Turn off axis
     # plt.show()  # comment out for larger graphs
     image_file_name = str(simple_graph).replace(' ', '-')
+    image_file_name = network_name.replace(' ', '-') + '-' + image_file_name
     plt.savefig(f'./output/{image_file_name}.png')
 
 
 # dynamic multi/multidigraph visualization via plotly:
-def build_dynamic_multi_network(graph, mixed_graph):
+def build_dynamic_multi_network(graph, mixed_graph, graph_type, network_name):
     # plotly code below -- experimental but not as nice as matplot lib for curves
     fig = go.Figure()
     pos = graph.fruchterman_reingold_layout(mixed_graph)  # try this layout
@@ -175,7 +176,7 @@ def build_dynamic_multi_network(graph, mixed_graph):
                                          hoverinfo='text'))
 
     fig.update_layout(
-        title=f'{mixed_graph}',
+        title=f"{network_name} ({graph_type})",
         showlegend=False,
         hovermode='closest',
         margin=dict(b=0, l=0, r=0, t=40),
@@ -187,7 +188,7 @@ def build_dynamic_multi_network(graph, mixed_graph):
 
 
 # Function to build dynamic (plotly) visualizations for simple graphs
-def build_dynamic_network(graph, mixed_graph):
+def build_dynamic_network(graph, mixed_graph, graph_type, network_name):
     # Initialize the figure
     fig = go.Figure()
 
@@ -210,7 +211,7 @@ def build_dynamic_network(graph, mixed_graph):
                                  textposition='bottom center',
                                  hoverinfo='text'))
 
-    # Add edges
+    # Add edges (no labels necessary, since these are simple graphs)
     for u, v, data in mixed_graph.edges(data=True):
         num_edges = mixed_graph.number_of_edges(u, v)
 
@@ -221,33 +222,15 @@ def build_dynamic_network(graph, mixed_graph):
             fig.add_trace(go.Scatter(x=[x0, x1], y=[y0, y1],
                                      mode='lines+text',
                                      line=dict(width=data.get('weight', 1), color='gray'),
-                                     text=data.get('relationship', ''),
+                                   #  text=data.get('relationship', ''),
                                      textposition='top center',
                                      hoverinfo='text'))
         else:
-            # Multiple edges, draw arcs
-            for i, (source, target, edge_data) in enumerate(mixed_graph.edges(u, v, data=True)):
-                arc_style = 0.5 * (1 - np.cos(np.pi * (i + 1) / (num_edges + 1)))
-
-                x0, y0 = pos[u]
-                x1, y1 = pos[v]
-
-                # Calculate control points for Bézier curve
-                cx, cy = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
-                control_x = cx + arc_style * (y1 - y0)
-                control_y = cy - arc_style * (x0 - x1)
-
-                # Create Bézier curve path
-                fig.add_trace(go.Scatter(x=[x0, control_x, x1], y=[y0, control_y, y1],
-                                         mode='lines+text',
-                                         line=dict(width=edge_data.get('weight', 1), color='gray'),
-                                         text=edge_data.get('relationship', ''),
-                                         textposition='top center',
-                                         hoverinfo='text'))
+            raise ValueError("Error: Supported types are Graph and DiGraph. Use build_dynamic_multi_network() for multigraphs.")
 
     # Update layout and display the figure
     fig.update_layout(
-        title=f'{mixed_graph}',
+        title=f"{network_name} ({graph_type})",
         showlegend=False,
         hovermode='closest',
         margin=dict(b=0, l=0, r=0, t=40),
