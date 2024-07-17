@@ -66,13 +66,13 @@ def get_subgraph_from_link(main_graph, relationship, is_directed):
                       data.get('relationship') == relationship}
 
     # Create the subgraph
-    subgraph = main_graph.edge_subgraph(subgraph_edges)
+    sub_graph = main_graph.edge_subgraph(subgraph_edges)
 
     # Return as Graph or DiGraph (simple undirected or directed graph)
     if is_directed:
-        return graph.DiGraph(subgraph)
+        return graph.DiGraph(sub_graph)
     else:
-        return graph.Graph(subgraph)
+        return graph.Graph(sub_graph)
 
 
 # fetch a dictionary of sub-graphs for each link:

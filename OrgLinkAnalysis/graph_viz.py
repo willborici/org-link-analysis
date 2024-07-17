@@ -104,6 +104,7 @@ def build_static_network(graph, simple_graph):
         # Draw each edge separately
         graph.draw_networkx_edges(simple_graph, pos, edgelist=[(u, v)],
                                   style="solid", edge_color='gray',
+                                  node_size=round_node_size,
                                   width=data.get('weight', 1.0))
 
         graph.draw_networkx_edge_labels(simple_graph, pos, edge_labels=edge_label,
