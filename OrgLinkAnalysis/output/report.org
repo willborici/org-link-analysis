@@ -11,23 +11,23 @@
 
 *** Degree Centrality
 
-Degree centrality measures the number of connections a node has in the network.
+Degree centrality measures the number of connections a given node has.
 
 **** Advice Relationship
-  - High degree centrality in the advice network indicates nodes that seek advice from many others. These nodes are central in seeking information and guidance within the organization.
+  - High degree centrality in the directed advice graph indicates nodes that seek advice from many others. These nodes are central in providing guidance (and, more generally, information) within the organization.
 
 **** Trust Relationship
-  - Nodes with high degree centrality in the trust network are trusted by many others. They play critical roles in building and maintaining trust relationships across the organization.
+  - Nodes with high degree centrality in the trust network are trusted by many others. They play critical roles in building and maintaining trust relationships across the organization. In major projects that require reduced resistance points, for instance, these are the nodes you should leverage.
 
 **** Chat Relationship
-  - High degree centrality in the chat network signifies nodes that communicate frequently about work-related matters. These nodes facilitate communication and collaboration among team members.
+  - High degree centrality in the chat network signifies nodes that communicate frequently about work-related matters. These nodes facilitate communication and collaboration among team members, thus acting as information brokers for any official or 'grapevine' information.
 
 **** Mixed Graph
-  - Degree centrality across all relationships identifies nodes that are highly connected overall, regardless of relationship type. These nodes are pivotal in maintaining connectivity and information flow within the organizational network.
+  - Degree centrality across all relationships combined into a mixed network identifies nodes that are highly connected overall, regardless of the link. These nodes are pivotal in maintaining connectivity and information flow within the organizational network. In moments of strategic change or a new course of action, this graph would be an invaluable asset.
 
 *** Eigenvector Centrality
 
-Eigenvector centrality measures the influence of a node in a network based on the concept that connections to high-scoring nodes contribute more to the node's score.
+In graph theory, eigenvector centrality is defined as a measure of the influence of a node in a network based on the concept that connections to high-scoring nodes contribute more to the node's score.
 
 **** Advice Relationship
   - Eigenvector centrality identifies nodes that are influential because they receive advice from other influential nodes. Nodes with high eigenvector centrality are likely to receive advice from other nodes that are themselves well-connected within the advice network.
