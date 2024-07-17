@@ -166,7 +166,9 @@ def insert_output_to_file(report_file, section_header, output_text, output_graph
 def generate_analysis_report(graph, graph_type, graph_to_analyze):
     # print graph information as a new section:
     graph_info_text = f"** Graph properties: {graph_to_analyze} ({graph_type})\n----------------"
-    output_graph = f"\n#+ATTR_HTML: :width 800px\n[[file:{str(graph_to_analyze)}]]\n"
+
+    image_file_name = str(graph_to_analyze).replace(' ', '-')
+    output_graph = f"\n#+ATTR_HTML: :width 800px\n[[file:{image_file_name}.png]]\n"
 
     insert_output_to_file(REPORT_FILE,
                           graph_info_text,

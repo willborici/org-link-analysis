@@ -73,7 +73,8 @@ def build_static_multi_network(graph, mixed_graph):
     plt.title(f"{mixed_graph}")
     plt.axis('off')  # Turn off axis
     # plt.show()  # Comment out for large graphs
-    plt.savefig(f'./output/{str(mixed_graph)}')
+    image_file_name = str(mixed_graph).replace(' ', '-')
+    plt.savefig(f'./output/{image_file_name}.png')
 
 
 # Static visualization for Graph/DiGraph types:
@@ -112,7 +113,8 @@ def build_static_network(graph, simple_graph):
     plt.title(f"{simple_graph}")
     plt.axis('off')  # Turn off axis
     # plt.show()  # comment out for larger graphs
-    plt.savefig(f'./output/{str(simple_graph)}')
+    image_file_name = str(simple_graph).replace(' ', '-')
+    plt.savefig(f'./output/{image_file_name}.png')
 
 
 # dynamic multi/multidigraph visualization via plotly:
