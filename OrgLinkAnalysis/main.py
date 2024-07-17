@@ -105,7 +105,6 @@ analyze_graph(graph, mixed_graph)
 
 # analyze all other subgraphs:
 for link, subgraph in subgraphs.items():
-    print(type(subgraphs[link]))
     analyze_graph(graph, subgraphs[link])
 
 
@@ -139,8 +138,8 @@ def visualize_graph(networkx_graph, graph_to_visualize):
 
 
 # visualize the mixed graph:
-visualize_graph(graph, mixed_graph)
+#visualize_graph(graph, mixed_graph)
 
 # visualize all other subgraphs:
-for link, subgraph in subgraphs.items():
-    visualize_graph(graph, subgraphs[link])
+#for link, subgraph in subgraphs.items():
+#    visualize_graph(graph, subgraphs[link])

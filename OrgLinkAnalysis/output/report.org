@@ -5,229 +5,227 @@
 #+DESCRIPTION: ONA report analysis, including output
 #+KEYWORDS: link analysis, ona, sna, network analysis
 
-* Introduction
+* Theoretical Background
 
-* Centrality Analysis
+** Centrality Analysis
 
-** Eigenvector Centrality
+*** Eigenvector Centrality
 
 Eigenvector centrality measures the influence of a node in a network based on the concept that connections to high-scoring nodes contribute more to the node's score.
 
-- **For Advice Relationship**
+**** Advice Relationship
   - Eigenvector centrality identifies nodes that are influential because they receive advice from other influential nodes. Nodes with high eigenvector centrality are likely to receive advice from other nodes that are themselves well-connected within the advice network.
 
-- **For Trust Relationship**
+**** Trust Relationship
   - Nodes with high eigenvector centrality in the trust network are trusted by other nodes that are themselves well-trusted. This measure helps identify nodes that are central to the trust relationships within the organization.
 
-- **For Chat Relationship**
+**** Chat Relationship
   - Eigenvector centrality in the chat network identifies nodes that are central to communication about work-related matters. Nodes with high eigenvector centrality in this network are likely to be important conduits of information and collaboration.
 
-- **Mixed Graph (All Relationships)**
+**** Mixed Graph
   - Eigenvector centrality across all relationships provides a combined measure of node influence considering advice-seeking, trust, and communication interactions. Nodes with high overall eigenvector centrality play significant roles in the organizational network across different types of relationships.
 
-** Degree Centrality
+*** Degree Centrality
 
 Degree centrality measures the number of connections a node has in the network.
 
-- **For Advice Relationship**
+**** Advice Relationship
   - High degree centrality in the advice network indicates nodes that seek advice from many others. These nodes are central in seeking information and guidance within the organization.
 
-- **For Trust Relationship**
+**** Trust Relationship
   - Nodes with high degree centrality in the trust network are trusted by many others. They play critical roles in building and maintaining trust relationships across the organization.
 
-- **For Chat Relationship**
+**** Chat Relationship
   - High degree centrality in the chat network signifies nodes that communicate frequently about work-related matters. These nodes facilitate communication and collaboration among team members.
 
-- **Mixed Graph (All Relationships)**
+**** Mixed Graph
   - Degree centrality across all relationships identifies nodes that are highly connected overall, regardless of relationship type. These nodes are pivotal in maintaining connectivity and information flow within the organizational network.
 
-** Closeness Centrality
+*** Closeness Centrality
 
 Closeness centrality measures how quickly a node can reach other nodes in the network.
 
-- **For Advice Relationship**
+**** Advice Relationship
   - Nodes with high closeness centrality in the advice network can quickly access diverse sources of advice within the organization. They are centrally located in the advice-seeking process.
 
-- **For Trust Relationship**
+**** Trust Relationship
   - High closeness centrality in the trust network indicates nodes that can quickly reach out to trusted peers or be reached by others, facilitating efficient trust-building activities.
 
-- **For Chat Relationship**
+**** Chat Relationship
   - Nodes with high closeness centrality in the chat network can efficiently disseminate and receive work-related information. They play key roles in the communication network.
 
-- **Mixed Graph (All Relationships)**
+**** Mixed Graph
   - Closeness centrality across all relationships identifies nodes that are centrally located for quick access and communication across different relationship types. These nodes are critical for maintaining network efficiency and responsiveness.
 
-** Betweenness Centrality
+*** Betweenness Centrality
 
 Betweenness centrality identifies nodes that act as bridges between other nodes in the network.
 
-- **For Advice Relationship**
+**** Advice Relationship
   - Nodes with high betweenness centrality in the advice network are crucial for connecting otherwise disconnected groups. They facilitate the flow of advice between different parts of the organization.
 
-- **For Trust Relationship**
+**** Trust Relationship
   - High betweenness centrality in the trust network indicates nodes that connect otherwise separate clusters of trust relationships. They play key roles in bridging trust gaps within the organization.
 
-- **For Chat Relationship**
+**** Chat Relationship
   - Nodes with high betweenness centrality in the chat network act as bridges for communication between different teams or departments. They enhance collaboration across organizational boundaries.
 
-- **Mixed Graph (All Relationships)**
+**** Mixed Graph
   - Betweenness centrality across all relationships identifies nodes that are central in connecting different parts of the organizational network. These nodes facilitate overall network cohesion and integration.
 
-* Connectivity Analysis
+** Connectivity Analysis
 
-- **Strongly-Connected Components**
+*** Strongly-Connected Components
   - Identifies maximal subsets of nodes where each node is reachable from any other node within the same subset. In your organizational graph, this analysis helps identify cohesive groups of nodes with strong mutual dependencies, such as teams or functional units.
 
-- **Weakly-Connected Components**
+*** Weakly-Connected Components
   - Groups nodes where there is a path between any pair of nodes, ignoring directionality in advice relationships. It reveals overall network connectivity patterns, highlighting clusters of nodes with indirect connections.
 
-- **Reachability**
+*** Reachability
   - Assesses whether all nodes are reachable from all other nodes, providing insights into overall network connectedness and accessibility. It helps understand the extent to which information and interactions can flow across the organizational network.
 
-* Path Analysis
+** Path Analysis
 
-- **Average Shortest Path Length**
+*** Average Shortest Path Length
   - Measures the average number of edges along the shortest paths for all pairs of nodes. It evaluates efficiency in advice dissemination, trust propagation, and communication pathways.
 
-- **Reachability**
+*** Reachability
   - Determines if paths exist between nodes, reflecting accessibility and direct or indirect interaction possibilities across all relationship types.
 
-* Clustering Analysis
+** Clustering Analysis
 
-- **Clustering Coefficient**
+*** Clustering Coefficient
   - Quantifies the tendency of nodes to form clusters or tightly-knit groups. It indicates cohesive units within the network based on trust or communication interactions.
 
-- **Transitivity**
+*** Transitivity
   - Measures the likelihood that two nodes connected to a common node are also connected to each other, reflecting mutual advice-seeking patterns and communication dynamics.
 
-* Assortativity Analysis
+** Assortativity Analysis
 
-- **Degree Assortativity**
+*** Degree Assortativity
   - Measures the tendency for nodes with similar degrees to connect, revealing patterns of trust or communication preference based on similarity in connectivity.
 
-- **Attribute Assortativity**
+*** Attribute Assortativity
   - Assesses if nodes with similar attributes (e.g., centrality scores, organizational roles) preferentially connect, indicating homophily in advice-seeking or collaboration.
 
+* ONA Results
 
-
-* Introduction
-Graph properties: MultiDiGraph with 6 nodes and 15 edges
+** Graph properties: MultiDiGraph with 6 nodes and 15 edges (multi-digraph)
 ----------------
 
-* Centrality Analysis
-Centrality Report:
+*** Centrality Analysis
+Centrality Report for MultiDiGraph with 6 nodes and 15 edges:
  {'degree': {'Will': 2.0, 'Wilma': 1.0, 'Willa': 1.4000000000000001, 'Bob': 0.8, 'Alice': 0.4, 'Joe': 0.4}, 'eigenvector': 'no eigenvector for mixed graphs', 'closeness': {'Will': 0.8333333333333334, 'Wilma': 0.625, 'Willa': 0.7142857142857143, 'Bob': 0.5555555555555556, 'Alice': 0.0, 'Joe': 0.45454545454545453}, 'betweenness': {'Will': 0.375, 'Wilma': 0.0, 'Willa': 0.375, 'Bob': 0.05, 'Alice': 0.0, 'Joe': 0.0}} 
 
 
-* Connectivity Analysis
-Connectivity Report:
- {'edge connectivity': 0, 'SCC': [{'Bob', 'Will', 'Willa', 'Joe', 'Wilma'}, {'Alice'}]} 
+*** Connectivity Analysis
+Connectivity Report for MultiDiGraph with 6 nodes and 15 edges:
+ {'edge connectivity': 0, 'SCC': [{'Will', 'Willa', 'Wilma', 'Joe', 'Bob'}, {'Alice'}]} 
 
 
-* Path Analysis
-Path Analysis Report:
-Path Analysis Report:
- {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Bob': ['Will', 'Bob']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Bob': ['Wilma', 'Will', 'Bob']}, 'Willa': {'Willa': ['Willa'], 'Joe': ['Willa', 'Joe']}, 'Bob': {'Bob': ['Bob'], 'Will': ['Bob', 'Will'], 'Wilma': ['Bob', 'Will', 'Wilma']}, 'Joe': {'Joe': ['Joe'], 'Willa': ['Joe', 'Willa']}}, 'average_shortest_path_length': inf} 
-
-Path Analysis Report:
-Path Analysis Report:
- {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Bob': ['Will', 'Bob']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Bob': ['Wilma', 'Will', 'Bob']}, 'Willa': {'Willa': ['Willa'], 'Joe': ['Willa', 'Joe']}, 'Bob': {'Bob': ['Bob'], 'Will': ['Bob', 'Will'], 'Wilma': ['Bob', 'Will', 'Wilma']}, 'Joe': {'Joe': ['Joe'], 'Willa': ['Joe', 'Willa']}}, 'average_shortest_path_length': inf} 
-
- {'all_pairs_shortest_paths': {'Will': {'Will': ['Will']}, 'Wilma': {'Wilma': ['Wilma']}, 'Willa': {'Willa': ['Willa'], 'Will': ['Willa', 'Will'], 'Wilma': ['Willa', 'Wilma']}, 'Bob': {'Bob': ['Bob'], 'Willa': ['Bob', 'Willa'], 'Will': ['Bob', 'Willa', 'Will'], 'Wilma': ['Bob', 'Willa', 'Wilma']}, 'Alice': {'Alice': ['Alice'], 'Will': ['Alice', 'Will'], 'Bob': ['Alice', 'Bob'], 'Willa': ['Alice', 'Bob', 'Willa'], 'Wilma': ['Alice', 'Bob', 'Willa', 'Wilma']}}, 'average_shortest_path_length': inf} 
-
-Path Analysis Report:
-Path Analysis Report:
- {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Bob': ['Will', 'Bob']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Bob': ['Wilma', 'Will', 'Bob']}, 'Willa': {'Willa': ['Willa'], 'Joe': ['Willa', 'Joe']}, 'Bob': {'Bob': ['Bob'], 'Will': ['Bob', 'Will'], 'Wilma': ['Bob', 'Will', 'Wilma']}, 'Joe': {'Joe': ['Joe'], 'Willa': ['Joe', 'Willa']}}, 'average_shortest_path_length': inf} 
-
-Path Analysis Report:
-Path Analysis Report:
- {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Bob': ['Will', 'Bob']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Bob': ['Wilma', 'Will', 'Bob']}, 'Willa': {'Willa': ['Willa'], 'Joe': ['Willa', 'Joe']}, 'Bob': {'Bob': ['Bob'], 'Will': ['Bob', 'Will'], 'Wilma': ['Bob', 'Will', 'Wilma']}, 'Joe': {'Joe': ['Joe'], 'Willa': ['Joe', 'Willa']}}, 'average_shortest_path_length': inf} 
-
- {'all_pairs_shortest_paths': {'Will': {'Will': ['Will']}, 'Wilma': {'Wilma': ['Wilma']}, 'Willa': {'Willa': ['Willa'], 'Will': ['Willa', 'Will'], 'Wilma': ['Willa', 'Wilma']}, 'Bob': {'Bob': ['Bob'], 'Willa': ['Bob', 'Willa'], 'Will': ['Bob', 'Willa', 'Will'], 'Wilma': ['Bob', 'Willa', 'Wilma']}, 'Alice': {'Alice': ['Alice'], 'Will': ['Alice', 'Will'], 'Bob': ['Alice', 'Bob'], 'Willa': ['Alice', 'Bob', 'Willa'], 'Wilma': ['Alice', 'Bob', 'Willa', 'Wilma']}}, 'average_shortest_path_length': inf} 
-
- {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Willa': ['Will', 'Willa']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Willa': ['Wilma', 'Will', 'Willa']}, 'Willa': {'Willa': ['Willa'], 'Will': ['Willa', 'Will'], 'Wilma': ['Willa', 'Will', 'Wilma']}}, 'average_shortest_path_length': inf} 
-
+*** Path Analysis
+Path Analysis Report for MultiDiGraph with 6 nodes and 15 edges:
  {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Willa': ['Will', 'Willa'], 'Bob': ['Will', 'Bob'], 'Joe': ['Will', 'Willa', 'Joe']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Willa': ['Wilma', 'Will', 'Willa'], 'Bob': ['Wilma', 'Will', 'Bob'], 'Joe': ['Wilma', 'Will', 'Willa', 'Joe']}, 'Willa': {'Willa': ['Willa'], 'Will': ['Willa', 'Will'], 'Wilma': ['Willa', 'Wilma'], 'Joe': ['Willa', 'Joe'], 'Bob': ['Willa', 'Will', 'Bob']}, 'Bob': {'Bob': ['Bob'], 'Will': ['Bob', 'Will'], 'Willa': ['Bob', 'Willa'], 'Wilma': ['Bob', 'Will', 'Wilma'], 'Joe': ['Bob', 'Willa', 'Joe']}, 'Alice': {'Alice': ['Alice'], 'Will': ['Alice', 'Will'], 'Bob': ['Alice', 'Bob'], 'Wilma': ['Alice', 'Will', 'Wilma'], 'Willa': ['Alice', 'Will', 'Willa'], 'Joe': ['Alice', 'Will', 'Willa', 'Joe']}, 'Joe': {'Joe': ['Joe'], 'Willa': ['Joe', 'Willa'], 'Will': ['Joe', 'Willa', 'Will'], 'Wilma': ['Joe', 'Willa', 'Wilma'], 'Bob': ['Joe', 'Willa', 'Will', 'Bob']}}, 'average_shortest_path_length': inf} 
 
 
-* Clustering Analysis
-Clustering Report:
+*** Clustering Analysis
+Clustering Report for MultiDiGraph with 6 nodes and 15 edges:
  {'clustering_coefficient': {'Will': 0.3333333333333333, 'Wilma': 0.0, 'Willa': 0.3333333333333333, 'Bob': 1.0, 'Alice': 1.0, 'Joe': 0.0}} 
 
 
-* Assortativity Analysis
-Assortativity Report:
+*** Assortativity Analysis
+Assortativity Report for MultiDiGraph with 6 nodes and 15 edges:
  {'in_degree_assortativity': -0.2618924633082493, 'out_degree_assortativity': -0.5037453706946005} 
 
-
-* Introduction
-Graph properties: Graph with 3 nodes and 2 edges
+End of analysis for: MultiDiGraph with 6 nodes and 15 edges
 ----------------
 
-* Centrality Analysis
-Centrality Report:
+** Graph properties: Graph with 3 nodes and 2 edges (simple undirected)
+----------------
+
+*** Centrality Analysis
+Centrality Report for Graph with 3 nodes and 2 edges:
  {'degree': {'Will': 1.0, 'Wilma': 0.5, 'Willa': 0.5}, 'eigenvector': {'Will': 0.707106690085642, 'Wilma': 0.5000000644180599, 'Willa': 0.5000000644180599}, 'closeness': {'Will': 1.0, 'Wilma': 0.6666666666666666, 'Willa': 0.6666666666666666}, 'betweenness': {'Will': 1.0, 'Wilma': 0.0, 'Willa': 0.0}} 
 
 
-* Connectivity Analysis
-Connectivity Report:
- {'connected components': [{'Will', 'Wilma', 'Willa'}]} 
+*** Connectivity Analysis
+Connectivity Report for Graph with 3 nodes and 2 edges:
+ {'connected components': [{'Willa', 'Wilma', 'Will'}]} 
 
 
-* Clustering Analysis
-Clustering Report:
+*** Path Analysis
+Path Analysis Report for Graph with 3 nodes and 2 edges:
+ {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Willa': ['Will', 'Willa']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Willa': ['Wilma', 'Will', 'Willa']}, 'Willa': {'Willa': ['Willa'], 'Will': ['Willa', 'Will'], 'Wilma': ['Willa', 'Will', 'Wilma']}}, 'average_shortest_path_length': inf} 
+
+
+*** Clustering Analysis
+Clustering Report for Graph with 3 nodes and 2 edges:
  {'clustering_coefficient': {'Will': 0, 'Wilma': 0, 'Willa': 0}, 'transitivity': 0} 
 
 
-* Assortativity Analysis
-Assortativity Report:
+*** Assortativity Analysis
+Assortativity Report for Graph with 3 nodes and 2 edges:
  {'assortativity': -1.0} 
 
-
-* Introduction
-Graph properties: DiGraph with 5 nodes and 5 edges
+End of analysis for: Graph with 3 nodes and 2 edges
 ----------------
 
-* Centrality Analysis
-Centrality Report:
+** Graph properties: DiGraph with 5 nodes and 5 edges (simple directed)
+----------------
+
+*** Centrality Analysis
+Centrality Report for DiGraph with 5 nodes and 5 edges:
  {'degree': {'Will': 0.5, 'Wilma': 0.25, 'Willa': 0.75, 'Bob': 0.5, 'Alice': 0.5}, 'eigenvector': 'power iteration convergence failure for eigenvector', 'closeness': {'Will': 0.5625, 'Wilma': 0.375, 'Willa': 0.3333333333333333, 'Bob': 0.25, 'Alice': 0.0}, 'betweenness': {'Will': 0.0, 'Wilma': 0.0, 'Willa': 0.25, 'Bob': 0.16666666666666666, 'Alice': 0.0}} 
 
 
-* Connectivity Analysis
-Connectivity Report:
- {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Bob', 'Will', 'Willa', 'Alice', 'Wilma'}], 'reachability': 'weak'} 
+*** Connectivity Analysis
+Connectivity Report for DiGraph with 5 nodes and 5 edges:
+ {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Will', 'Alice', 'Willa', 'Wilma', 'Bob'}], 'reachability': 'weak'} 
 
 
-* Clustering Analysis
-Clustering Report:
+*** Path Analysis
+Path Analysis Report for DiGraph with 5 nodes and 5 edges:
+ {'all_pairs_shortest_paths': {'Will': {'Will': ['Will']}, 'Wilma': {'Wilma': ['Wilma']}, 'Willa': {'Willa': ['Willa'], 'Will': ['Willa', 'Will'], 'Wilma': ['Willa', 'Wilma']}, 'Bob': {'Bob': ['Bob'], 'Willa': ['Bob', 'Willa'], 'Will': ['Bob', 'Willa', 'Will'], 'Wilma': ['Bob', 'Willa', 'Wilma']}, 'Alice': {'Alice': ['Alice'], 'Will': ['Alice', 'Will'], 'Bob': ['Alice', 'Bob'], 'Willa': ['Alice', 'Bob', 'Willa'], 'Wilma': ['Alice', 'Bob', 'Willa', 'Wilma']}}, 'average_shortest_path_length': inf} 
+
+
+*** Clustering Analysis
+Clustering Report for DiGraph with 5 nodes and 5 edges:
  {'clustering_coefficient': {'Will': 0, 'Wilma': 0, 'Willa': 0, 'Bob': 0, 'Alice': 0}, 'transitivity': 0} 
 
 
-* Assortativity Analysis
-Assortativity Report:
+*** Assortativity Analysis
+Assortativity Report for DiGraph with 5 nodes and 5 edges:
  {'in_degree_assortativity': -0.16666666666666735, 'out_degree_assortativity': -0.8750000000000001} 
 
-
-* Introduction
-Graph properties: Graph with 5 nodes and 3 edges
+End of analysis for: DiGraph with 5 nodes and 5 edges
 ----------------
 
-* Centrality Analysis
-Centrality Report:
+** Graph properties: Graph with 5 nodes and 3 edges (simple undirected)
+----------------
+
+*** Centrality Analysis
+Centrality Report for Graph with 5 nodes and 3 edges:
  {'degree': {'Will': 0.5, 'Wilma': 0.25, 'Willa': 0.25, 'Bob': 0.25, 'Joe': 0.25}, 'eigenvector': {'Will': 0.7071067811066628, 'Wilma': 0.49999999994351296, 'Willa': 1.0628924235733579e-05, 'Bob': 0.49999999994351296, 'Joe': 1.0628924235733579e-05}, 'closeness': {'Will': 0.5, 'Wilma': 0.3333333333333333, 'Willa': 0.25, 'Bob': 0.3333333333333333, 'Joe': 0.25}, 'betweenness': {'Will': 0.16666666666666666, 'Wilma': 0.0, 'Willa': 0.0, 'Bob': 0.0, 'Joe': 0.0}} 
 
 
-* Connectivity Analysis
-Connectivity Report:
- {'connected components': [{'Bob', 'Will', 'Wilma'}, {'Willa', 'Joe'}]} 
+*** Connectivity Analysis
+Connectivity Report for Graph with 5 nodes and 3 edges:
+ {'connected components': [{'Bob', 'Wilma', 'Will'}, {'Willa', 'Joe'}]} 
 
 
-* Clustering Analysis
-Clustering Report:
+*** Path Analysis
+Path Analysis Report for Graph with 5 nodes and 3 edges:
+ {'all_pairs_shortest_paths': {'Will': {'Will': ['Will'], 'Wilma': ['Will', 'Wilma'], 'Bob': ['Will', 'Bob']}, 'Wilma': {'Wilma': ['Wilma'], 'Will': ['Wilma', 'Will'], 'Bob': ['Wilma', 'Will', 'Bob']}, 'Willa': {'Willa': ['Willa'], 'Joe': ['Willa', 'Joe']}, 'Bob': {'Bob': ['Bob'], 'Will': ['Bob', 'Will'], 'Wilma': ['Bob', 'Will', 'Wilma']}, 'Joe': {'Joe': ['Joe'], 'Willa': ['Joe', 'Willa']}}, 'average_shortest_path_length': inf} 
+
+
+*** Clustering Analysis
+Clustering Report for Graph with 5 nodes and 3 edges:
  {'clustering_coefficient': {'Will': 0, 'Wilma': 0, 'Willa': 0, 'Bob': 0, 'Joe': 0}, 'transitivity': 0} 
 
 
-* Assortativity Analysis
-Assortativity Report:
+*** Assortativity Analysis
+Assortativity Report for Graph with 5 nodes and 3 edges:
  {'assortativity': -0.4999999999999998} 
 
+End of analysis for: Graph with 5 nodes and 3 edges
+----------------
