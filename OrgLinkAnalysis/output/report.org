@@ -141,7 +141,7 @@ aforementioned theoretical background explanations.
 ----------------
 
 #+ATTR_HTML: :width 800px
-[[file:MultiDiGraph-with-6-nodes-and-15-edges.png]]
+[[file:Mixed-Graph-MultiDiGraph-with-6-nodes-and-15-edges.png]]
 
 *** Centrality Analysis
 Centrality Report for MultiDiGraph with 6 nodes and 15 edges:
@@ -150,7 +150,7 @@ Centrality Report for MultiDiGraph with 6 nodes and 15 edges:
 
 *** Connectivity Analysis
 Connectivity Report for MultiDiGraph with 6 nodes and 15 edges:
- {'edge connectivity': 0, 'SCC': [{'Joe', 'Wilma', 'Will', 'Willa', 'Bob'}, {'Alice'}]} 
+ {'edge connectivity': 0, 'SCC': [{'Bob', 'Joe', 'Will', 'Wilma', 'Willa'}, {'Alice'}]} 
 
 
 *** Path Analysis
@@ -174,7 +174,7 @@ End of analysis for: MultiDiGraph with 6 nodes and 15 edges
 ----------------
 
 #+ATTR_HTML: :width 800px
-[[file:Graph-with-3-nodes-and-2-edges.png]]
+[[file:Trust-Graph-with-3-nodes-and-2-edges.png]]
 
 *** Centrality Analysis
 Centrality Report for Graph with 3 nodes and 2 edges:
@@ -183,7 +183,7 @@ Centrality Report for Graph with 3 nodes and 2 edges:
 
 *** Connectivity Analysis
 Connectivity Report for Graph with 3 nodes and 2 edges:
- {'connected components': [{'Wilma', 'Will', 'Willa'}]} 
+ {'connected components': [{'Will', 'Wilma', 'Willa'}]} 
 
 
 *** Path Analysis
@@ -207,7 +207,7 @@ End of analysis for: Graph with 3 nodes and 2 edges
 ----------------
 
 #+ATTR_HTML: :width 800px
-[[file:DiGraph-with-5-nodes-and-5-edges.png]]
+[[file:Advice-DiGraph-with-5-nodes-and-5-edges.png]]
 
 *** Centrality Analysis
 Centrality Report for DiGraph with 5 nodes and 5 edges:
@@ -216,7 +216,7 @@ Centrality Report for DiGraph with 5 nodes and 5 edges:
 
 *** Connectivity Analysis
 Connectivity Report for DiGraph with 5 nodes and 5 edges:
- {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Wilma', 'Will', 'Willa', 'Alice', 'Bob'}], 'reachability': 'weak'} 
+ {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Bob', 'Alice', 'Will', 'Wilma', 'Willa'}], 'reachability': 'weak'} 
 
 
 *** Path Analysis
@@ -240,7 +240,7 @@ End of analysis for: DiGraph with 5 nodes and 5 edges
 ----------------
 
 #+ATTR_HTML: :width 800px
-[[file:Graph-with-5-nodes-and-3-edges.png]]
+[[file:Chat-Graph-with-5-nodes-and-3-edges.png]]
 
 *** Centrality Analysis
 Centrality Report for Graph with 5 nodes and 3 edges:
@@ -249,7 +249,7 @@ Centrality Report for Graph with 5 nodes and 3 edges:
 
 *** Connectivity Analysis
 Connectivity Report for Graph with 5 nodes and 3 edges:
- {'connected components': [{'Wilma', 'Will', 'Bob'}, {'Joe', 'Willa'}]} 
+ {'connected components': [{'Bob', 'Will', 'Wilma'}, {'Joe', 'Willa'}]} 
 
 
 *** Path Analysis

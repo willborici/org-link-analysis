@@ -83,7 +83,7 @@ for link in links:
 
 
 # Given a graph, analyze by running various algorithms and get a report
-def analyze_graph(networkx_graph, graph_to_analyze):
+def analyze_graph(networkx_graph, graph_to_analyze, network_name):
     # fetch the graph type to pass it to the report generator below
     # since some graph algorithms run on specific graph types
     graph_type = ''
@@ -97,15 +97,15 @@ def analyze_graph(networkx_graph, graph_to_analyze):
         graph_type = 'multi-digraph'
 
     # generate a report of the graph-algorithmic analysis
-    report.generate_analysis_report(networkx_graph, graph_type, graph_to_analyze)
+    report.generate_analysis_report(networkx_graph, graph_type, graph_to_analyze, network_name)
 
 
 # analyze mixed graph:
-analyze_graph(graph, mixed_graph)
+analyze_graph(graph, mixed_graph, 'Mixed Graph')
 
 # analyze all other subgraphs:
 for link, subgraph in subgraphs.items():
-    analyze_graph(graph, subgraphs[link])
+    analyze_graph(graph, subgraphs[link], link)
 
 
 # Visualize a graph. Here, network_name is the link label (advice, trust, etc.)

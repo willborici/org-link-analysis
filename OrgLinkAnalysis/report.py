@@ -163,11 +163,12 @@ def insert_output_to_file(report_file, section_header, output_text, output_graph
 
 
 # main function to run and report on the various networkx graph algorithms
-def generate_analysis_report(graph, graph_type, graph_to_analyze):
+def generate_analysis_report(graph, graph_type, graph_to_analyze, network_name):
     # print graph information as a new section:
     graph_info_text = f"** Graph properties: {graph_to_analyze} ({graph_type})\n----------------"
 
     image_file_name = str(graph_to_analyze).replace(' ', '-')
+    image_file_name = network_name.replace(' ', '-') + '-' + image_file_name
     output_graph = f"\n#+ATTR_HTML: :width 800px\n[[file:{image_file_name}.png]]\n"
 
     insert_output_to_file(REPORT_FILE,
