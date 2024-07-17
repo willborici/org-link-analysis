@@ -103,7 +103,7 @@ def analyze_graph(networkx_graph, graph_to_analyze, network_name):
 # analyze mixed graph:
 analyze_graph(graph, mixed_graph, 'Mixed Graph')
 
-# analyze all other subgraphs:
+# analyze all other subgraphs (link is the key, subgraph is the value):
 for link, subgraph in subgraphs.items():
     analyze_graph(graph, subgraphs[link], link)
 
@@ -140,6 +140,6 @@ def visualize_graph(networkx_graph, graph_to_visualize, network_name):
 # visualize the mixed graph:
 visualize_graph(graph, mixed_graph, 'Mixed Graph')
 
-# visualize all other subgraphs:
+# visualize all other subgraphs (link is the key, subgraph is the value):
 for link, subgraph in subgraphs.items():
     visualize_graph(graph, subgraphs[link], link)

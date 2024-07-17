@@ -7,6 +7,23 @@
 
 * Theoretical Background
 
+While there is plenty of research on network analysis, the following three particular
+network types -- advice (directed), and trust and chat (undirected) -- were adapted from  the 1993
+research by David Krackhardt and Jeffrey R. Hanson, a summary of which is available at
+https://hbr.org/1993/07/informal-networks-the-company-behind-the-chart.
+
+I have been experimenting with different organizational network types, including perceived
+links such as "likes/ dislikes", "socializes with", etc., in order to study important
+questions, such as:
+- In a highly diverse opinion pool, what are the power and influence structures that can be
+  leveraged to push positive change forward?
+- While the "reports to" links are clear in almost every organization (often visually represented
+  by organizational charts), who are the key information brokers?
+- In a new strategic initiative, who should be the alpha in every team? (Hint: discard the org chart.)
+- In times of changes introduced by initiatives or large projects, where are the resistance points?
+- In modern diversity, equity, and inclusion initiatives, are organizations truly inclusive, or
+  are they merely checking off statistical requirements for public-facing reports?
+
 ** Centrality Analysis
 
 *** Degree Centrality
