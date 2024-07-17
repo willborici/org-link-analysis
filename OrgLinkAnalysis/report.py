@@ -1,15 +1,12 @@
 # output of graph algorithms into an org-mode file for report generation
-import networkx
+
+REPORT_FILE = './output/report.org'
 
 
 def analyze_centrality(graph, graph_type, mixed_graph):
     centrality_analysis = {}
 
-    # Degree centrality measures the number of direct relationships (both incoming and outgoing)
-    # for each node. In our case, for advice, it indicates how many people seek advice from a
-    # particular individual. For trust and chat, it shows how many trusted relationships or
-    # chat connections a node has.
-    centrality_analysis['degree'] = graph.degree_centrality(mixed_graph),
+    centrality_analysis['degree'] = graph.degree_centrality(mixed_graph)
 
     if graph_type in ('simple directed', 'simple undirected'):
         try:
@@ -19,14 +16,8 @@ def analyze_centrality(graph, graph_type, mixed_graph):
     else:
         centrality_analysis['eigenvector'] = 'no eigenvector for mixed graphs'
 
-    # Closeness Centrality measures how close a node is to all other nodes in the network.
-    # It indicates nodes that can quickly interact with others, which might be important for
-    # spreading information or influence.
     centrality_analysis['closeness'] = graph.closeness_centrality(mixed_graph)
 
-    # Betweenness Centrality identifies nodes that act as bridges between different parts of the
-    # network. It can highlight nodes that are critical for communication or influence across
-    # the organization.
     centrality_analysis['betweenness'] = graph.betweenness_centrality(mixed_graph)
 
     return centrality_analysis
@@ -96,10 +87,10 @@ def analyze_paths(graph, graph_type, mixed_graph):
     return path_analysis
 
 
-def compute_clustering_coefficient_multidigraph(G):
+def compute_clustering_coefficient_multidigraph(graph):
     clustering_coefficients = {}
-    for node in G.nodes():
-        neighbors = list(G.neighbors(node))
+    for node in graph.nodes():
+        neighbors = list(graph.neighbors(node))
         if len(neighbors) < 2:
             clustering_coefficients[node] = 0.0
         else:
@@ -107,7 +98,7 @@ def compute_clustering_coefficient_multidigraph(G):
             possible_triangles = len(neighbors) * (len(neighbors) - 1)
             for neighbor1 in neighbors:
                 for neighbor2 in neighbors:
-                    if neighbor1 != neighbor2 and G.has_edge(neighbor1, neighbor2):
+                    if neighbor1 != neighbor2 and graph.has_edge(neighbor1, neighbor2):
                         num_triangles += 1
             clustering_coefficients[node] = num_triangles / possible_triangles if possible_triangles > 0 else 0.0
     return clustering_coefficients
@@ -169,30 +160,72 @@ def analyze_assortativity(graph, graph_type, mixed_graph):
     return assortativity_analysis
 
 
+# function to insert analysis output into the corresponding section
+# of the report.org file (org-mode, because emacs rocks!) in the output directory
+# NB: the section headers need to be given literally
+def insert_output_to_file(report_file, section_header, output_text):
+    with open(report_file, 'r') as output_file:
+        lines = output_file.readlines()
+
+    with open(report_file, 'w') as output_file:
+        section_found = False
+        for line in lines:
+            if line.strip().startswith(section_header):
+                section_found = True
+                output_file.write(line)  # Write the section header
+                output_file.write(output_text)  # Write the output under this section
+            else:
+                output_file.write(line)  # Write the line as-is
+
+        if not section_found:
+            output_file.write(f"\n* {section_header}\n")  # If section doesn't exist, create it
+            output_file.write(output_text)
+
+
 # main function to run and report on the various networkx graph algorithms
 # TODO: remove the print debugging statements and create a Report.org file to
 #       process the output into a readable report
 def generate_analysis_report(graph, graph_type, graph_to_analyze):
+
+    output_text = ''
+
     # print graph information:
-    print(f"Graph properties: {graph_to_analyze}")
-    print('*****\n')
+    output_text = f"Graph properties: {graph_to_analyze}\n----------------\n"
+    insert_output_to_file(REPORT_FILE,
+                          'Introduction',
+                          output_text)
 
     # Centrality Algorithms:
     centrality_report = analyze_centrality(graph, graph_type, graph_to_analyze)
-    print(f'Centrality Report:\n {centrality_report} \n\n')
+    output_text = f'Centrality Report:\n {centrality_report} \n\n'
+    insert_output_to_file(REPORT_FILE,
+                          'Centrality Analysis',
+                          output_text)
 
     # Connectivity Algorithms
     connectivity_report = analyze_connectivity(graph, graph_type, graph_to_analyze)
-    print(f'Connectivity Report:\n {connectivity_report} \n\n')
+    output_text = f'Connectivity Report:\n {connectivity_report} \n\n'
+    insert_output_to_file(REPORT_FILE,
+                          'Connectivity Analysis',
+                          output_text)
 
     # Path Algorithms:
     path_report = analyze_paths(graph, graph_type, graph_to_analyze)
-    print(f'Path Analysis Report:\n {path_report} \n\n')
+    output_text = f'Path Analysis Report:\n {path_report} \n\n'
+    insert_output_to_file(REPORT_FILE,
+                          'Path Analysis',
+                          output_text)
 
     # Clustering Algorithms:
     clustering_report = analyze_clustering(graph, graph_type, graph_to_analyze)
-    print(f'Clustering Report:\n {clustering_report} \n\n')
+    output_text = f'Clustering Report:\n {clustering_report} \n\n'
+    insert_output_to_file(REPORT_FILE,
+                          'Clustering Analysis',
+                          output_text)
 
     # Assortativity Algorithms:
     assortativity_report = analyze_assortativity(graph, graph_type, graph_to_analyze)
-    print(f'Assortativity Report:\n {assortativity_report} \n\n')
+    output_text = f'Assortativity Report:\n {assortativity_report} \n\n'
+    insert_output_to_file(REPORT_FILE,
+                          'Assortativity Analysis',
+                          output_text)
