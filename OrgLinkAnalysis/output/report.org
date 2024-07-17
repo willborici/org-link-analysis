@@ -113,6 +113,9 @@ Betweenness centrality identifies nodes that act as bridges between other nodes 
 ** Graph properties: MultiDiGraph with 6 nodes and 15 edges (multi-digraph)
 ----------------
 
+#+ATTR_HTML: :width 800px
+[[file:MultiDiGraph with 6 nodes and 15 edges]]
+
 *** Centrality Analysis
 Centrality Report for MultiDiGraph with 6 nodes and 15 edges:
  {'degree': {'Will': 2.0, 'Wilma': 1.0, 'Willa': 1.4000000000000001, 'Bob': 0.8, 'Alice': 0.4, 'Joe': 0.4}, 'eigenvector': 'no eigenvector for mixed graphs', 'closeness': {'Will': 0.8333333333333334, 'Wilma': 0.625, 'Willa': 0.7142857142857143, 'Bob': 0.5555555555555556, 'Alice': 0.0, 'Joe': 0.45454545454545453}, 'betweenness': {'Will': 0.375, 'Wilma': 0.0, 'Willa': 0.375, 'Bob': 0.05, 'Alice': 0.0, 'Joe': 0.0}} 
@@ -120,7 +123,7 @@ Centrality Report for MultiDiGraph with 6 nodes and 15 edges:
 
 *** Connectivity Analysis
 Connectivity Report for MultiDiGraph with 6 nodes and 15 edges:
- {'edge connectivity': 0, 'SCC': [{'Will', 'Willa', 'Wilma', 'Joe', 'Bob'}, {'Alice'}]} 
+ {'edge connectivity': 0, 'SCC': [{'Joe', 'Wilma', 'Will', 'Bob', 'Willa'}, {'Alice'}]} 
 
 
 *** Path Analysis
@@ -143,6 +146,9 @@ End of analysis for: MultiDiGraph with 6 nodes and 15 edges
 ** Graph properties: Graph with 3 nodes and 2 edges (simple undirected)
 ----------------
 
+#+ATTR_HTML: :width 800px
+[[file:Graph with 3 nodes and 2 edges]]
+
 *** Centrality Analysis
 Centrality Report for Graph with 3 nodes and 2 edges:
  {'degree': {'Will': 1.0, 'Wilma': 0.5, 'Willa': 0.5}, 'eigenvector': {'Will': 0.707106690085642, 'Wilma': 0.5000000644180599, 'Willa': 0.5000000644180599}, 'closeness': {'Will': 1.0, 'Wilma': 0.6666666666666666, 'Willa': 0.6666666666666666}, 'betweenness': {'Will': 1.0, 'Wilma': 0.0, 'Willa': 0.0}} 
@@ -150,7 +156,7 @@ Centrality Report for Graph with 3 nodes and 2 edges:
 
 *** Connectivity Analysis
 Connectivity Report for Graph with 3 nodes and 2 edges:
- {'connected components': [{'Willa', 'Wilma', 'Will'}]} 
+ {'connected components': [{'Will', 'Wilma', 'Willa'}]} 
 
 
 *** Path Analysis
@@ -173,6 +179,9 @@ End of analysis for: Graph with 3 nodes and 2 edges
 ** Graph properties: DiGraph with 5 nodes and 5 edges (simple directed)
 ----------------
 
+#+ATTR_HTML: :width 800px
+[[file:DiGraph with 5 nodes and 5 edges]]
+
 *** Centrality Analysis
 Centrality Report for DiGraph with 5 nodes and 5 edges:
  {'degree': {'Will': 0.5, 'Wilma': 0.25, 'Willa': 0.75, 'Bob': 0.5, 'Alice': 0.5}, 'eigenvector': 'power iteration convergence failure for eigenvector', 'closeness': {'Will': 0.5625, 'Wilma': 0.375, 'Willa': 0.3333333333333333, 'Bob': 0.25, 'Alice': 0.0}, 'betweenness': {'Will': 0.0, 'Wilma': 0.0, 'Willa': 0.25, 'Bob': 0.16666666666666666, 'Alice': 0.0}} 
@@ -180,7 +189,7 @@ Centrality Report for DiGraph with 5 nodes and 5 edges:
 
 *** Connectivity Analysis
 Connectivity Report for DiGraph with 5 nodes and 5 edges:
- {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Will', 'Alice', 'Willa', 'Wilma', 'Bob'}], 'reachability': 'weak'} 
+ {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Wilma', 'Will', 'Alice', 'Bob', 'Willa'}], 'reachability': 'weak'} 
 
 
 *** Path Analysis
@@ -203,6 +212,9 @@ End of analysis for: DiGraph with 5 nodes and 5 edges
 ** Graph properties: Graph with 5 nodes and 3 edges (simple undirected)
 ----------------
 
+#+ATTR_HTML: :width 800px
+[[file:Graph with 5 nodes and 3 edges]]
+
 *** Centrality Analysis
 Centrality Report for Graph with 5 nodes and 3 edges:
  {'degree': {'Will': 0.5, 'Wilma': 0.25, 'Willa': 0.25, 'Bob': 0.25, 'Joe': 0.25}, 'eigenvector': {'Will': 0.7071067811066628, 'Wilma': 0.49999999994351296, 'Willa': 1.0628924235733579e-05, 'Bob': 0.49999999994351296, 'Joe': 1.0628924235733579e-05}, 'closeness': {'Will': 0.5, 'Wilma': 0.3333333333333333, 'Willa': 0.25, 'Bob': 0.3333333333333333, 'Joe': 0.25}, 'betweenness': {'Will': 0.16666666666666666, 'Wilma': 0.0, 'Willa': 0.0, 'Bob': 0.0, 'Joe': 0.0}} 
@@ -210,7 +222,7 @@ Centrality Report for Graph with 5 nodes and 3 edges:
 
 *** Connectivity Analysis
 Connectivity Report for Graph with 5 nodes and 3 edges:
- {'connected components': [{'Bob', 'Wilma', 'Will'}, {'Willa', 'Joe'}]} 
+ {'connected components': [{'Bob', 'Will', 'Wilma'}, {'Joe', 'Willa'}]} 
 
 
 *** Path Analysis

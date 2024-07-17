@@ -70,9 +70,10 @@ def build_static_multi_network(graph, mixed_graph):
         else:  # TODO: update to include logic, if any, for orphan nodes
             pass
 
-    plt.title("Mixed Graph Visualization with Curved Edges")
+    plt.title(f"{mixed_graph}")
     plt.axis('off')  # Turn off axis
-    plt.show()
+    # plt.show()  # Comment out for large graphs
+    plt.savefig(f'./output/{str(mixed_graph)}')
 
 
 # Static visualization for Graph/DiGraph types:
@@ -108,9 +109,10 @@ def build_static_network(graph, simple_graph):
                                         font_size=7, font_color='black',
                                         label_pos=0.5, verticalalignment='center')
 
-    plt.title("Mixed Graph Visualization with Curved Edges")
+    plt.title(f"{simple_graph}")
     plt.axis('off')  # Turn off axis
-    plt.show()
+    # plt.show()  # comment out for larger graphs
+    plt.savefig(f'./output/{str(simple_graph)}')
 
 
 # dynamic multi/multidigraph visualization via plotly:
@@ -170,7 +172,7 @@ def build_dynamic_multi_network(graph, mixed_graph):
                                          hoverinfo='text'))
 
     fig.update_layout(
-        title='Org Network Analysis',
+        title=f'{mixed_graph}',
         showlegend=False,
         hovermode='closest',
         margin=dict(b=0, l=0, r=0, t=40),
@@ -242,7 +244,7 @@ def build_dynamic_network(graph, mixed_graph):
 
     # Update layout and display the figure
     fig.update_layout(
-        title='Org Network Analysis',
+        title=f'{mixed_graph}',
         showlegend=False,
         hovermode='closest',
         margin=dict(b=0, l=0, r=0, t=40),

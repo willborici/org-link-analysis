@@ -128,18 +128,18 @@ def visualize_graph(networkx_graph, graph_to_visualize):
         draw_graph.build_static_network(networkx_graph, graph_to_visualize)
 
         # plotly (dynamic):
-        draw_graph.build_dynamic_network(networkx_graph, graph_to_visualize)
+ #       draw_graph.build_dynamic_network(networkx_graph, graph_to_visualize)
     else:  # multigraphs
         # matplotlib (static):
         draw_graph.build_static_multi_network(graph, mixed_graph)
 
         # plotly (dynamic):
-        draw_graph.build_dynamic_multi_network(graph, mixed_graph)
+#        draw_graph.build_dynamic_multi_network(graph, mixed_graph)
 
 
 # visualize the mixed graph:
-#visualize_graph(graph, mixed_graph)
+visualize_graph(graph, mixed_graph)
 
 # visualize all other subgraphs:
-#for link, subgraph in subgraphs.items():
-#    visualize_graph(graph, subgraphs[link])
+for link, subgraph in subgraphs.items():
+    visualize_graph(graph, subgraphs[link])

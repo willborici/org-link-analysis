@@ -144,27 +144,34 @@ def analyze_assortativity(graph, graph_type, mixed_graph):
 
     elif graph_type in ['simple directed', 'multi-digraph']:
         # In-degree assortativity coefficient
-        assortativity_analysis['in_degree_assortativity'] = graph.degree_assortativity_coefficient(mixed_graph, x='in', y='in')
-        assortativity_analysis['out_degree_assortativity'] = graph.degree_assortativity_coefficient(mixed_graph, x='out', y='out')
+        assortativity_analysis['in_degree_assortativity'] = graph.degree_assortativity_coefficient(mixed_graph, x='in',
+                                                                                                   y='in')
+        assortativity_analysis['out_degree_assortativity'] = graph.degree_assortativity_coefficient(mixed_graph,
+                                                                                                    x='out', y='out')
 
     return assortativity_analysis
 
 
 # function to append analysis output for each graph analyzed
-def insert_output_to_file(report_file, section_header, output_text):
+def insert_output_to_file(report_file, section_header, output_text, output_graph=''):
     with open(report_file, 'a') as output_file:
         output_file.write(f"\n{section_header}\n")
         output_file.write(output_text)
+
+        if len(output_graph) > 0:  # insert corresponding graph figure
+            output_file.write(output_graph)
 
 
 # main function to run and report on the various networkx graph algorithms
 def generate_analysis_report(graph, graph_type, graph_to_analyze):
     # print graph information as a new section:
     graph_info_text = f"** Graph properties: {graph_to_analyze} ({graph_type})\n----------------"
+    output_graph = f"\n#+ATTR_HTML: :width 800px\n[[file:{str(graph_to_analyze)}]]\n"
 
     insert_output_to_file(REPORT_FILE,
                           graph_info_text,
-                          '')
+                          '',
+                          output_graph)
 
     # Centrality Algorithms:
     centrality_report = analyze_centrality(graph, graph_type, graph_to_analyze)
