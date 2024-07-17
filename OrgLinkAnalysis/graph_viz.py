@@ -56,14 +56,14 @@ def build_static_multi_network(graph, mixed_graph, graph_type, network_name):
             # for each edge/key tuple from the edge_list, draw the edge arc in a way
             # that tries to eliminate overlays, using variable arc_style radians
             for i, (source, target, edge_key) in enumerate(edge_list):
-                arc_style = 0.1 + 0.3 * (i / num_edges)
+                arc_style = 0.1 + 0.4 * (i / num_edges)
                 graph.draw_networkx_edges(mixed_graph, pos, edgelist=[(source, target, edge_key)],
                                           style="solid", edge_color='gray',
                                           node_size=round_node_size, width=data['weight'],
                                           connectionstyle=f"arc3,rad={arc_style}")
                 edge_labels = {(source, target, edge_key): mixed_graph[source][target][edge_key]['relationship']}
                 # play with this to move label around to minimize overlays
-                label_pos = 0.1 + 0.3 * (i / num_edges) + 0.5
+                label_pos = 0.1 + 0.4 * (i / num_edges) + 0.5
                 graph.draw_networkx_edge_labels(mixed_graph, pos, edge_labels=edge_labels,
                                                 label_pos=label_pos,
                                                 font_size=7, font_color='black')
@@ -76,6 +76,7 @@ def build_static_multi_network(graph, mixed_graph, graph_type, network_name):
     image_file_name = str(mixed_graph).replace(' ', '-')
     image_file_name = network_name.replace(' ', '-') + '-' + image_file_name
     plt.savefig(f'./output/{image_file_name}.png')
+
 
 # Static visualization for Graph/DiGraph types:
 def build_static_network(graph, simple_graph, graph_type, network_name):
@@ -222,11 +223,12 @@ def build_dynamic_network(graph, mixed_graph, graph_type, network_name):
             fig.add_trace(go.Scatter(x=[x0, x1], y=[y0, y1],
                                      mode='lines+text',
                                      line=dict(width=data.get('weight', 1), color='gray'),
-                                   #  text=data.get('relationship', ''),
+                                     #  text=data.get('relationship', ''),
                                      textposition='top center',
                                      hoverinfo='text'))
         else:
-            raise ValueError("Error: Supported types are Graph and DiGraph. Use build_dynamic_multi_network() for multigraphs.")
+            raise ValueError(
+                "Error: Supported types are Graph and DiGraph. Use build_dynamic_multi_network() for multigraphs.")
 
     # Update layout and display the figure
     fig.update_layout(

@@ -150,7 +150,7 @@ Centrality Report for MultiDiGraph with 6 nodes and 15 edges:
 
 *** Connectivity Analysis
 Connectivity Report for MultiDiGraph with 6 nodes and 15 edges:
- {'edge connectivity': 0, 'SCC': [{'Bob', 'Joe', 'Will', 'Wilma', 'Willa'}, {'Alice'}]} 
+ {'edge connectivity': 0, 'SCC': [{'Joe', 'Willa', 'Bob', 'Wilma', 'Will'}, {'Alice'}]} 
 
 
 *** Path Analysis
@@ -183,7 +183,7 @@ Centrality Report for Graph with 3 nodes and 2 edges:
 
 *** Connectivity Analysis
 Connectivity Report for Graph with 3 nodes and 2 edges:
- {'connected components': [{'Will', 'Wilma', 'Willa'}]} 
+ {'connected components': [{'Willa', 'Wilma', 'Will'}]} 
 
 
 *** Path Analysis
@@ -216,7 +216,7 @@ Centrality Report for DiGraph with 5 nodes and 5 edges:
 
 *** Connectivity Analysis
 Connectivity Report for DiGraph with 5 nodes and 5 edges:
- {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Bob', 'Alice', 'Will', 'Wilma', 'Willa'}], 'reachability': 'weak'} 
+ {'SCC': [{'Will'}, {'Wilma'}, {'Willa'}, {'Bob'}, {'Alice'}], 'WCC': [{'Willa', 'Bob', 'Wilma', 'Alice', 'Will'}], 'reachability': 'weak'} 
 
 
 *** Path Analysis
@@ -249,7 +249,7 @@ Centrality Report for Graph with 5 nodes and 3 edges:
 
 *** Connectivity Analysis
 Connectivity Report for Graph with 5 nodes and 3 edges:
- {'connected components': [{'Bob', 'Will', 'Wilma'}, {'Joe', 'Willa'}]} 
+ {'connected components': [{'Bob', 'Wilma', 'Will'}, {'Joe', 'Willa'}]} 
 
 
 *** Path Analysis
